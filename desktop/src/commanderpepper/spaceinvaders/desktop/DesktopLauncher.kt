@@ -1,12 +1,13 @@
-package commanderpepper.spaceinvaders.desktop;
+package commanderpepper.spaceinvaders.desktop
 
-import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import commanderpepper.spaceinvaders.SpaceInvaders;
+import com.badlogic.gdx.backends.lwjgl.LwjglApplication
+import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration
+import commanderpepper.spaceinvaders.SpaceInvaders
 
-public class DesktopLauncher {
-	public static void main (String[] arg) {
-		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		new LwjglApplication(new SpaceInvaders(), config);
-	}
+object DesktopLauncher {
+    @JvmStatic
+    fun main(arg: Array<String>) {
+        val config = LwjglApplicationConfiguration()
+        LwjglApplication(SpaceInvaders(), config)
+    }
 }
