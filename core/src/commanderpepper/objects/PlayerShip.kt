@@ -9,17 +9,27 @@ class PlayerShip(var x: Float = 25f,
                  val height: Float = 15f,
                  val width: Float = 45f) : Moveable {
 
+    private val shapeRenderer = ShapeRenderer()
+
     override fun move(xDelta: Float, yDelta: Float) {
-        x += xDelta
+        when {
+            x + xDelta < 0 -> x = 0f
+            x + width + xDelta > Gdx.graphics.width -> x = Gdx.graphics.width - width
+            else -> x += xDelta
+        }
         y += yDelta
     }
 
-    fun middleOfShip() = x + (width / 2)
+    private fun middleOfShip() = x + (width / 2)
 
     val playerFireballs = mutableListOf<Fireball>()
 
-    fun draw(shapeRenderer: ShapeRenderer) {
-        shapeRenderer.rect(x, y, width, height)
+    fun draw() {
+        shapeRenderer.apply {
+            begin(ShapeRenderer.ShapeType.Filled)
+            rect(x, y, width, height)
+            end()
+        }
     }
 
     fun update() {
@@ -38,7 +48,7 @@ class PlayerShip(var x: Float = 25f,
     /**
      * Send a fireball from the middle of the ship
      */
-    fun shoot(): Fireball {
+    private fun shoot(): Fireball {
         return Fireball(middleOfShip(), y, Fireball.defaultSize, Fireball.defaultYSpeed)
     }
 
