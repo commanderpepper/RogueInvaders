@@ -5,14 +5,16 @@ import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 
 class PlayerShip(var x: Float = 25f,
-                 val y: Float = 25f,
+                 var y: Float = 25f,
                  val height: Float = 15f,
-                 val width: Float = 45f) {
+                 val width: Float = 45f) : Moveable {
 
+    override fun move(xDelta: Float, yDelta: Float) {
+        x += xDelta
+        y += yDelta
+    }
 
-    fun middleOfShip() = x + ((x) / 2)
-
-//    var middleOfShip = (x + width) / 2
+    fun middleOfShip() = x + (width / 2)
 
     val playerFireballs = mutableListOf<Fireball>()
 
@@ -26,11 +28,11 @@ class PlayerShip(var x: Float = 25f,
         val shootInput = Gdx.input.isKeyJustPressed(Input.Keys.SPACE)
 
         when {
-            rightInput -> x += 3f
-            leftInput -> x -= 3f
+            rightInput -> move(3f, 0f)
+            leftInput -> move(-3f, 0f)
         }
 
-        if(shootInput) playerFireballs.add(shoot())
+        if (shootInput) playerFireballs.add(shoot())
     }
 
     /**
