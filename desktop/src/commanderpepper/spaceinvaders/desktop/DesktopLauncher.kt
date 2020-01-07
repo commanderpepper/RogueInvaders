@@ -8,8 +8,11 @@ import commanderpepper.spaceinvaders.SpaceInvaders
 object DesktopLauncher {
     @JvmStatic
     fun main(arg: Array<String>) {
-        val config = LwjglApplicationConfiguration()
-//        LwjglApplication(SpaceInvaders(), config)
+        val config = LwjglApplicationConfiguration().apply {
+            title = "Space Invaders"
+            height = 900
+            width = 500
+        }
         LwjglApplication(MainScreen(), config)
     }
 }

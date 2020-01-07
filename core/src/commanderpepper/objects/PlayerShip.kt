@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 class PlayerShip(var x: Float = 25f,
                  var y: Float = 25f,
                  val height: Float = 15f,
-                 val width: Float = 45f) : Moveable {
+                 val width: Float = 30f) : Moveable {
 
     private val shapeRenderer = ShapeRenderer()
 
@@ -22,7 +22,7 @@ class PlayerShip(var x: Float = 25f,
 
     private fun middleOfShip() = x + (width / 2)
 
-    val playerFireballs = mutableListOf<Fireball>()
+    var playerFireballs = mutableListOf<Fireball>()
 
     fun draw() {
         shapeRenderer.apply {
@@ -42,7 +42,7 @@ class PlayerShip(var x: Float = 25f,
             leftInput -> move(-3f, 0f)
         }
 
-        if (shootInput) playerFireballs.add(shoot())
+        if (shootInput && playerFireballs.isEmpty()) playerFireballs.add(shoot())
     }
 
     /**

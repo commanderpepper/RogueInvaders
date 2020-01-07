@@ -21,9 +21,11 @@ class MainScreen : ApplicationAdapter() {
         ship.update()
         ship.draw()
 
-        ship.playerFireballs.filter { !it.offScreen }.forEach {
+        ship.playerFireballs = ship.playerFireballs.filter { !it.offScreen }.toMutableList()
+        ship.playerFireballs.forEach {
             it.update()
             it.draw()
         }
+
     }
 }

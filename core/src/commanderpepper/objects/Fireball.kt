@@ -32,7 +32,7 @@ class Fireball(var x: Float, var y: Float, var size: Float, var ySpeed: Float) :
     }
 
     companion object {
-        const val defaultSize = 10f
+        const val defaultSize = 6f
         const val defaultYSpeed = 15f
     }
 
