@@ -3,6 +3,7 @@ package commanderpepper.objects
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
+import commanderpepper.interfaces.Moveable
 
 class PlayerShip(var x: Float = 25f,
                  var y: Float = 25f,

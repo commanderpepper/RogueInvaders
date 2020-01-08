@@ -2,6 +2,7 @@ package commanderpepper.objects
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
+import commanderpepper.interfaces.Moveable
 
 class Fireball(var x: Float, var y: Float, var size: Float, var ySpeed: Float) : Moveable {
 
