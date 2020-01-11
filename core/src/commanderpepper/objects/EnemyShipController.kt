@@ -8,7 +8,7 @@ import kotlin.math.abs
 private const val horizontalEnemyShipDistance = 35
 private const val verticalEnemyShipDistance = 45
 
-class EnemyShipController : Drawable, Updatable {
+class EnemyShipController() : Drawable, Updatable {
 
     private val enemyShipList = mutableListOf<EnemyShip>()
     private var enemyShipHorizontalSpeed = 1f
