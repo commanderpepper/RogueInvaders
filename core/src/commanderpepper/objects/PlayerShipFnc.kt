@@ -18,7 +18,7 @@ class PlayerShipFnc(
     override fun draw() {
         shapeRenderer.apply {
             begin(ShapeRenderer.ShapeType.Filled)
-            color = Color.GREEN
+            color = Color.LIGHT_GRAY
             rect(xPosition, yPosition, shipWidth, shipHeight)
             end()
         }
