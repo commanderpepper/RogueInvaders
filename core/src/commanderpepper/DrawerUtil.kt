@@ -22,4 +22,4 @@ fun checkIfXPositionIsTooLeft(xPosition: Float): Boolean {
 
 fun calculateShipPositionWhenTooRight(width: Float) = Gdx.graphics.width - width
 
-fun calculateShipPositionWhenTooLeft() = 0f
+fun calculateShipPositionWhenTooLeft(leftLimit: Float = 0f) = leftLimit

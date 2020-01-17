@@ -6,6 +6,7 @@ import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.GL20
 import commanderpepper.*
 import commanderpepper.objects.*
+import commanderpepper.objects.Player.PlayerShipFnc
 
 class MainScreen : ApplicationAdapter() {
 
