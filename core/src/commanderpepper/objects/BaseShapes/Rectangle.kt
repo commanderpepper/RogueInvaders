@@ -10,5 +10,5 @@ open class Rectangle(
         private val width: Float
 ) {
 
-    protected val shapeRenderer = ShapeRenderer()
+
 }

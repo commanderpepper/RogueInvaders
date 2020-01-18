@@ -1,5 +1,6 @@
 package commanderpepper.objects.Player
 
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import commanderpepper.interfaces.Drawable
@@ -14,6 +15,8 @@ class PlayerShipFnc(
         private val shipHeight: Float,
         private val shipWidth: Float
 ) : Rectangle(xPosition = shipXPosition, yPosition = shipYPosition, height = shipHeight, width = shipWidth), Drawable {
+
+    override val shapeRenderer: ShapeRenderer = ShapeRenderer()
 
     override fun draw() {
         shapeRenderer.apply {
@@ -32,4 +35,17 @@ class PlayerShipFnc(
         return shipYPosition + shipHeight
     }
 
+}
+
+fun calculateShipPositionWhenTooRight(width: Float) = Gdx.graphics.width - width
+
+fun calculateShipPositionWhenTooLeft(leftLimit: Float = 0f) = leftLimit
+
+fun checkPlayerShipDirection(leftInput: Boolean, rightInput: Boolean): Float {
+    return when {
+        rightInput && leftInput -> 0f
+        rightInput -> 3f
+        leftInput -> -3f
+        else -> 0f
+    }
 }

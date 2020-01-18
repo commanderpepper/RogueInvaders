@@ -13,7 +13,7 @@ class EnemyShip(var x: Float,
                 val height: Float = 5f,
                 val width: Float = 5f) : Moveable, Drawable, Updatable {
 
-    private val shapeRenderer = ShapeRenderer()
+    override val shapeRenderer = ShapeRenderer()
 
     fun updateYSpeed(ySpeedDelta: Float){
         if(ySpeed <= 6){

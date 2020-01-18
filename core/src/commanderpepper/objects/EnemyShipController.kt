@@ -1,6 +1,7 @@
 package commanderpepper.objects
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import commanderpepper.interfaces.Drawable
 import commanderpepper.interfaces.Updatable
 import kotlin.math.abs
@@ -9,6 +10,8 @@ private const val horizontalEnemyShipDistance = 35
 private const val verticalEnemyShipDistance = 45
 
 class EnemyShipController() : Drawable, Updatable {
+
+    override val shapeRenderer: ShapeRenderer = ShapeRenderer()
 
     private val enemyShipList = mutableListOf<EnemyShip>()
     private var enemyShipHorizontalSpeed = 1f
