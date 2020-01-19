@@ -9,7 +9,7 @@ import kotlin.math.abs
 private const val horizontalEnemyShipDistance = 35
 private const val verticalEnemyShipDistance = 45
 
-class EnemyShipController() : Drawable, Updatable {
+class EnemyShipController : Drawable, Updatable {
 
     override val shapeRenderer: ShapeRenderer = ShapeRenderer()
 

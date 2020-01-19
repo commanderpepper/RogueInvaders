@@ -2,12 +2,14 @@ package commanderpepper.objects.BaseShapes
 
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
+import commanderpepper.objects.Height
+import commanderpepper.objects.Point
+import commanderpepper.objects.Width
 
 open class Rectangle(
-        private val xPosition: Float,
-        private val yPosition: Float,
-        private val height: Float,
-        private val width: Float
+        private val point: Point,
+        private val height: Height,
+        private val width: Width
 ) {
 
 

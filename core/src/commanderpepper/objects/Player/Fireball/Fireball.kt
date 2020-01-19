@@ -4,14 +4,16 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import commanderpepper.interfaces.Drawable
 import commanderpepper.objects.BaseShapes.Rectangle
+import commanderpepper.objects.Height
+import commanderpepper.objects.Point
+import commanderpepper.objects.Width
 
 class Fireball(
-        private val fireballXPosition: Float,
-        private val fireballYPosition: Float,
-        private val fireballHeight: Float,
-        private val fireballWidth: Float
+        private val point: Point,
+        private val height: Height,
+        private val width: Width
 ) : Rectangle(
-        fireballXPosition, fireballYPosition, fireballHeight, fireballWidth
+        point, height, width
 ), Drawable {
 
     override val shapeRenderer: ShapeRenderer = ShapeRenderer()
@@ -20,7 +22,7 @@ class Fireball(
         shapeRenderer.apply {
             begin(ShapeRenderer.ShapeType.Filled)
             color = Color.LIGHT_GRAY
-            rect(fireballXPosition, fireballYPosition, fireballWidth, fireballHeight)
+            rect(point.xCoordinate.value, point.yCoordinate.value, width.measurement, height.measurement)
             end()
         }
     }

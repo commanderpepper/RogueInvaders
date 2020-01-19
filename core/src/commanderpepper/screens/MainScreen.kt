@@ -15,25 +15,27 @@ import commanderpepper.objects.Player.Fireball.Fireball
 
 class MainScreen : ApplicationAdapter() {
 
-    private lateinit var enemyShipController: EnemyShipController
+//    private val shipYPosition = 45f
+//    private var shipXPosition = 25f
+//    private var shipWidth = 30f
+//    private val shipHeight = 15f
+//
+//    private var fireballXDelta = 0f
+//    private var fireballYDelta = 0f
+//
+//    private var fireballXPosition = 0f
+//    private var fireballHeight = 5f
+//    private var fireballWidth = 5f
+//    private var fireballOnScreen = false
 
-    private val shipYPosition = 45f
-    private var shipXPosition = 25f
-    private var shipWidth = 30f
-    private val shipHeight = 15f
+    private var shipXCoordinate = XCoordinate(45f)
+    private var shipYCoordinate = YCoordinate(25f)
 
-    private var fireballXDelta = 0f
-    private var fireballYDelta = 0f
-
-    private var fireballXPosition = 0f
-    private var fireballHeight = 5f
-    private var fireballWidth = 5f
-    private var fireballOnScreen = false
+    private val shipHeight = Height(15f)
+    private val shipWidth = Width(25f)
 
     override fun create() {
-        enemyShipController = EnemyShipController().apply {
-            createEnemyShips()
-        }
+
     }
 
     override fun render() {
@@ -43,52 +45,53 @@ class MainScreen : ApplicationAdapter() {
         val leftInput = Gdx.input.isKeyPressed(Input.Keys.LEFT)
         val shoopInput = Gdx.input.isKeyJustPressed(Input.Keys.SPACE)
 
-        shipXPosition += checkPlayerShipDirection(leftInput, rightInput)
+        shipXCoordinate = checkPlayerShipDirection(shipXCoordinate, leftInput, rightInput)
 
-        when {
-            checkIfXPositionIsTooRight(shipXPosition, shipWidth) -> shipXPosition = calculateShipPositionWhenTooRight(shipWidth)
-            checkIfXPositionIsTooLeft(shipXPosition) -> shipXPosition = calculateShipPositionWhenTooLeft()
+        /**
+         * This allows for player ship to wrap the screen
+         * Cool but, not intended. Might add it in the future.
+         */
+//        shipXCoordinate = when {
+//            checkIfXCoordinateIsTooLeft(shipXCoordinate) -> calculateShipPositionWhenTooRight(shipWidth)
+//            checkIfXCoordinateIsTooRight(shipXCoordinate, shipWidth) -> calculateShipPositionWhenTooLeft()
+//            else -> shipXCoordinate
+//        }
+
+        shipXCoordinate = when {
+            checkIfXCoordinateIsTooLeft(shipXCoordinate) -> calculateShipPositionWhenTooLeft()
+            checkIfXCoordinateIsTooRight(shipXCoordinate, shipWidth) -> calculateShipPositionWhenTooRight(shipWidth)
+            else -> shipXCoordinate
         }
 
-        val playerShipFnc = PlayerShipFnc(shipXPosition, shipYPosition, shipHeight, shipWidth)
+        val shipPoint = Point(shipXCoordinate, shipYCoordinate)
+
+        val playerShipFnc = PlayerShipFnc(shipPoint, shipHeight, shipWidth)
         playerShipFnc.draw()
 
 //        val fireball = Fireball(fireballXPosition, fireballYPosition, fireballHeight, fireballWidth)
-        if (shoopInput && !fireballOnScreen) {
-            fireballYDelta = playerShipFnc.getFireballYOrigin()
-            fireballXPosition = playerShipFnc.getFireballXOrigin()
-
-            val fireball = Fireball(fireballXPosition,
-                    fireballYDelta,
-                    fireballHeight,
-                    fireballWidth)
-            fireball.draw()
-
-            fireballOnScreen = true
-            fireballYDelta += 1
-        }
-
-        if (fireballOnScreen) {
-            val fireball = Fireball(fireballXPosition,
-                    fireballYDelta,
-                    fireballHeight,
-                    fireballWidth)
-            fireball.draw()
-
-            fireballYDelta += 1
-        }
-
-//        ship.update()
-//        ship.draw()
+//        if (shoopInput && !fireballOnScreen) {
+//            fireballYDelta = playerShipFnc.getFireballYOrigin()
+//            fireballXPosition = playerShipFnc.getFireballXOrigin()
 //
-//        ship.playerFireballs = ship.playerFireballs.filter { !it.offScreen }.toMutableList()
-//        ship.playerFireballs.forEach {
-//            it.update()
-//            it.draw()
+//            val fireball = Fireball(fireballXPosition,
+//                    fireballYDelta,
+//                    fireballHeight,
+//                    fireballWidth)
+//            fireball.draw()
+//
+//            fireballOnScreen = true
+//            fireballYDelta += 1
 //        }
 //
-//        enemyShipController.update()
-//        enemyShipController.draw()
+//        if (fireballOnScreen) {
+//            val fireball = Fireball(fireballXPosition,
+//                    fireballYDelta,
+//                    fireballHeight,
+//                    fireballWidth)
+//            fireball.draw()
+//
+//            fireballYDelta += 1
+//        }
     }
 
 

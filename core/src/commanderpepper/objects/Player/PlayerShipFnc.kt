@@ -4,17 +4,17 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import commanderpepper.interfaces.Drawable
+import commanderpepper.objects.*
 import commanderpepper.objects.BaseShapes.Rectangle
 
 /**
  * This will be like the player ship except that it's going to be functional
  */
 class PlayerShipFnc(
-        private val shipXPosition: Float,
-        private val shipYPosition: Float,
-        private val shipHeight: Float,
-        private val shipWidth: Float
-) : Rectangle(xPosition = shipXPosition, yPosition = shipYPosition, height = shipHeight, width = shipWidth), Drawable {
+        private val point: Point,
+        private val height: Height,
+        private val width: Width
+) : Rectangle(point, height, width), Drawable {
 
     override val shapeRenderer: ShapeRenderer = ShapeRenderer()
 
@@ -22,30 +22,30 @@ class PlayerShipFnc(
         shapeRenderer.apply {
             begin(ShapeRenderer.ShapeType.Filled)
             color = Color.LIGHT_GRAY
-            rect(shipXPosition, shipYPosition, shipWidth, shipHeight)
+            rect(point.xCoordinate.value, point.yCoordinate.value, width.measurement, height.measurement)
             end()
         }
     }
 
     fun getFireballXOrigin(): Float {
-        return shipXPosition + shipWidth / 2
+        return (point.xCoordinate.value + width.measurement) / 2
     }
 
     fun getFireballYOrigin(): Float {
-        return shipYPosition + shipHeight
+        return point.yCoordinate.value + height.measurement
     }
 
 }
 
-fun calculateShipPositionWhenTooRight(width: Float) = Gdx.graphics.width - width
+fun calculateShipPositionWhenTooRight(width: Width) = XCoordinate(Gdx.graphics.width - width.measurement)
 
-fun calculateShipPositionWhenTooLeft(leftLimit: Float = 0f) = leftLimit
+fun calculateShipPositionWhenTooLeft(xCoordinateLimit: XCoordinate = XCoordinate(0f)) = xCoordinateLimit
 
-fun checkPlayerShipDirection(leftInput: Boolean, rightInput: Boolean): Float {
+fun checkPlayerShipDirection(xCoordinate: XCoordinate, leftInput: Boolean, rightInput: Boolean): XCoordinate {
     return when {
-        rightInput && leftInput -> 0f
-        rightInput -> 3f
-        leftInput -> -3f
-        else -> 0f
+        rightInput && leftInput -> xCoordinate.copy()
+        rightInput -> XCoordinate(xCoordinate.value + 3f)
+        leftInput -> XCoordinate(xCoordinate.value - 3f)
+        else -> xCoordinate.copy()
     }
 }
