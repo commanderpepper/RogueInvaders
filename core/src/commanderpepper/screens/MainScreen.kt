@@ -4,35 +4,27 @@ import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.GL20
-import commanderpepper.*
 import commanderpepper.objects.*
 import commanderpepper.objects.Player.PlayerShipFnc
 import commanderpepper.objects.Player.calculateShipPositionWhenTooLeft
 import commanderpepper.objects.Player.calculateShipPositionWhenTooRight
 import commanderpepper.objects.Player.checkPlayerShipDirection
-import commanderpepper.objects.Player.Fireball.*
 import commanderpepper.objects.Player.Fireball.Fireball
 
 class MainScreen : ApplicationAdapter() {
 
-//    private val shipYPosition = 45f
-//    private var shipXPosition = 25f
-//    private var shipWidth = 30f
-//    private val shipHeight = 15f
-//
-//    private var fireballXDelta = 0f
-//    private var fireballYDelta = 0f
-//
-//    private var fireballXPosition = 0f
-//    private var fireballHeight = 5f
-//    private var fireballWidth = 5f
-//    private var fireballOnScreen = false
-
     private var shipXCoordinate = XCoordinate(45f)
     private var shipYCoordinate = YCoordinate(25f)
-
     private val shipHeight = Height(15f)
     private val shipWidth = Width(25f)
+
+    private val fireballHeight = Height(10f)
+    private val fireballWidth = Width(5f)
+
+    private val fireballYSpeed = YCoordinate(3f)
+
+    private var fireBallOnScreen = false
+    private lateinit var fireballPoint: Point
 
     override fun create() {
 
@@ -65,33 +57,25 @@ class MainScreen : ApplicationAdapter() {
 
         val shipPoint = Point(shipXCoordinate, shipYCoordinate)
 
-        val playerShipFnc = PlayerShipFnc(shipPoint, shipHeight, shipWidth)
-        playerShipFnc.draw()
+        val playerShip = PlayerShipFnc(shipPoint, shipHeight, shipWidth)
+        playerShip.draw()
 
-//        val fireball = Fireball(fireballXPosition, fireballYPosition, fireballHeight, fireballWidth)
-//        if (shoopInput && !fireballOnScreen) {
-//            fireballYDelta = playerShipFnc.getFireballYOrigin()
-//            fireballXPosition = playerShipFnc.getFireballXOrigin()
-//
-//            val fireball = Fireball(fireballXPosition,
-//                    fireballYDelta,
-//                    fireballHeight,
-//                    fireballWidth)
-//            fireball.draw()
-//
-//            fireballOnScreen = true
-//            fireballYDelta += 1
-//        }
-//
-//        if (fireballOnScreen) {
-//            val fireball = Fireball(fireballXPosition,
-//                    fireballYDelta,
-//                    fireballHeight,
-//                    fireballWidth)
-//            fireball.draw()
-//
-//            fireballYDelta += 1
-//        }
+        if (shoopInput && !fireBallOnScreen) {
+            fireballPoint = playerShip.getFireballPointOrigin()
+            val fireball = Fireball(fireballPoint, fireballHeight, fireballWidth)
+            fireball.draw()
+            fireBallOnScreen = true
+        }
+
+        if (fireBallOnScreen) {
+            if (!checkIfYCoordianteIsTooHigh(fireballPoint.yCoordinate, fireballHeight)) {
+                fireballPoint = fireballPoint.increaseYCoordiante(fireballYSpeed)
+                val fireball = Fireball(fireballPoint, fireballHeight, fireballWidth)
+                fireball.draw()
+            } else {
+                fireBallOnScreen = false
+            }
+        }
     }
 
 

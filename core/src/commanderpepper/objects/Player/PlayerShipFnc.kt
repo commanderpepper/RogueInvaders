@@ -27,12 +27,16 @@ class PlayerShipFnc(
         }
     }
 
-    fun getFireballXOrigin(): Float {
-        return (point.xCoordinate.value + width.measurement) / 2
+    private fun getFireballXOrigin(): XCoordinate {
+        return XCoordinate(point.xCoordinate.value + (width.measurement / 2))
     }
 
-    fun getFireballYOrigin(): Float {
-        return point.yCoordinate.value + height.measurement
+    private fun getFireballYOrigin(): YCoordinate {
+        return YCoordinate(point.yCoordinate.value + height.measurement)
+    }
+
+    fun getFireballPointOrigin(): Point {
+        return Point(getFireballXOrigin(), getFireballYOrigin())
     }
 
 }
