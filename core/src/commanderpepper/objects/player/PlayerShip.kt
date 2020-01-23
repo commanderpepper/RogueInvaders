@@ -1,16 +1,16 @@
-package commanderpepper.objects.Player
+package commanderpepper.objects.player
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import commanderpepper.interfaces.Drawable
 import commanderpepper.objects.*
-import commanderpepper.objects.BaseShapes.Rectangle
+import commanderpepper.objects.baseshapes.Rectangle
 
 /**
  * This will be like the player ship except that it's going to be functional
  */
-class PlayerShipFnc(
+class PlayerShip(
         private val point: Point,
         private val height: Height,
         private val width: Width
@@ -27,16 +27,17 @@ class PlayerShipFnc(
         }
     }
 
-    private fun getFireballXOrigin(): XCoordinate {
-        return XCoordinate(point.xCoordinate.value + (width.measurement / 2))
+    private fun getFireballXOrigin(fireballWidth: Width): XCoordinate {
+        return XCoordinate(point.xCoordinate.value +
+                ((width.measurement / 2) - (fireballWidth.measurement / 2)))
     }
 
     private fun getFireballYOrigin(): YCoordinate {
         return YCoordinate(point.yCoordinate.value + height.measurement)
     }
 
-    fun getFireballPointOrigin(): Point {
-        return Point(getFireballXOrigin(), getFireballYOrigin())
+    fun getFireballPointOrigin(fireballWidth: Width): Point {
+        return Point(getFireballXOrigin(fireballWidth), getFireballYOrigin())
     }
 
 }

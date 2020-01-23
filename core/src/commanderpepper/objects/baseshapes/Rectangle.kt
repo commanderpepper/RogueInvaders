@@ -1,7 +1,5 @@
-package commanderpepper.objects.BaseShapes
+package commanderpepper.objects.baseshapes
 
-import com.badlogic.gdx.graphics.Color
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import commanderpepper.objects.Height
 import commanderpepper.objects.Point
 import commanderpepper.objects.Width

@@ -5,11 +5,11 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.GL20
 import commanderpepper.objects.*
-import commanderpepper.objects.Player.PlayerShipFnc
-import commanderpepper.objects.Player.calculateShipPositionWhenTooLeft
-import commanderpepper.objects.Player.calculateShipPositionWhenTooRight
-import commanderpepper.objects.Player.checkPlayerShipDirection
-import commanderpepper.objects.Player.Fireball.Fireball
+import commanderpepper.objects.player.PlayerShip
+import commanderpepper.objects.player.calculateShipPositionWhenTooLeft
+import commanderpepper.objects.player.calculateShipPositionWhenTooRight
+import commanderpepper.objects.player.checkPlayerShipDirection
+import commanderpepper.objects.player.fireball.Fireball
 
 class MainScreen : ApplicationAdapter() {
 
@@ -18,10 +18,9 @@ class MainScreen : ApplicationAdapter() {
     private val shipHeight = Height(15f)
     private val shipWidth = Width(25f)
 
-    private val fireballHeight = Height(10f)
-    private val fireballWidth = Width(5f)
-
-    private val fireballYSpeed = YCoordinate(3f)
+    private val fireballHeight = Height(8f)
+    private val fireballWidth = Width(8f)
+    private val fireballYSpeed = YCoordinate(4f)
 
     private var fireBallOnScreen = false
     private lateinit var fireballPoint: Point
@@ -57,11 +56,11 @@ class MainScreen : ApplicationAdapter() {
 
         val shipPoint = Point(shipXCoordinate, shipYCoordinate)
 
-        val playerShip = PlayerShipFnc(shipPoint, shipHeight, shipWidth)
+        val playerShip = PlayerShip(shipPoint, shipHeight, shipWidth)
         playerShip.draw()
 
         if (shoopInput && !fireBallOnScreen) {
-            fireballPoint = playerShip.getFireballPointOrigin()
+            fireballPoint = playerShip.getFireballPointOrigin(fireballWidth)
             val fireball = Fireball(fireballPoint, fireballHeight, fireballWidth)
             fireball.draw()
             fireBallOnScreen = true

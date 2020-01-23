@@ -1,9 +1,9 @@
-package commanderpepper.objects.Player.Fireball
+package commanderpepper.objects.player.fireball
 
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import commanderpepper.interfaces.Drawable
-import commanderpepper.objects.BaseShapes.Rectangle
+import commanderpepper.objects.baseshapes.Rectangle
 import commanderpepper.objects.Height
 import commanderpepper.objects.Point
 import commanderpepper.objects.Width
