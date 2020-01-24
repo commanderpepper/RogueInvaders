@@ -10,11 +10,13 @@ import commanderpepper.objects.player.calculateShipPositionWhenTooLeft
 import commanderpepper.objects.player.calculateShipPositionWhenTooRight
 import commanderpepper.objects.player.checkPlayerShipDirection
 import commanderpepper.objects.player.fireball.Fireball
+import commanderpepper.objects.player.fireball.FireballBar
+import commanderpepper.objects.player.fireball.FireballLevel
 
 class MainScreen : ApplicationAdapter() {
 
-    private var shipXCoordinate = XCoordinate(45f)
-    private var shipYCoordinate = YCoordinate(25f)
+    private var shipXCoordinate = XCoordinate(50f)
+    private var shipYCoordinate = YCoordinate(50f)
     private val shipHeight = Height(15f)
     private val shipWidth = Width(25f)
 
@@ -24,6 +26,11 @@ class MainScreen : ApplicationAdapter() {
 
     private var fireBallOnScreen = false
     private lateinit var fireballPoint: Point
+
+    private val fireballBarXCoordinate = XCoordinate(25f)
+    private val fireballBarYCoordinate = YCoordinate(25f)
+
+    private var fireBallLevel: Int = 0
 
     override fun create() {
 
@@ -59,11 +66,17 @@ class MainScreen : ApplicationAdapter() {
         val playerShip = PlayerShip(shipPoint, shipHeight, shipWidth)
         playerShip.draw()
 
+        fireBallLevel++
+        val fireballBar = FireballBar.createFireballBar(fireBallLevel,
+                Point(fireballBarXCoordinate, fireballBarYCoordinate), Height(15f))
+        fireballBar.draw()
+
         if (shoopInput && !fireBallOnScreen) {
             fireballPoint = playerShip.getFireballPointOrigin(fireballWidth)
             val fireball = Fireball(fireballPoint, fireballHeight, fireballWidth)
             fireball.draw()
             fireBallOnScreen = true
+            fireBallLevel = 0
         }
 
         if (fireBallOnScreen) {

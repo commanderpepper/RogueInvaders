@@ -7,9 +7,9 @@ import commanderpepper.objects.Point
 import commanderpepper.objects.Width
 import commanderpepper.objects.baseshapes.Rectangle
 
-enum class FireballLevel(private val range: IntRange) {
-    Low(0..5),
-    Medium(6..10),
-    High(11..15)
-}
 
+class FireballLevel(private val level: Int,
+                    private val height: Height,
+                    private val width: Width) {
+
+}
