@@ -1,5 +1,6 @@
 package commanderpepper.objects.player.fireball
 
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import commanderpepper.interfaces.Drawable
@@ -16,6 +17,7 @@ class FireballBar private constructor(
         private val width: Width
 ) : Rectangle(point, height, width), Drawable {
     override val shapeRenderer: ShapeRenderer = ShapeRenderer()
+
 
     override fun draw() {
         shapeRenderer.apply {
@@ -35,6 +37,7 @@ class FireballBar private constructor(
 
 private val low = 0..60
 private val medium = 61..120
+private val limit: Float = (Gdx.graphics.width / 2).toFloat()
 
 fun determineFireballBarColor(level: Int): Color {
     return when (level) {
@@ -45,9 +48,11 @@ fun determineFireballBarColor(level: Int): Color {
 }
 
 fun determineFireballBarWidth(level: Int): Width {
-    return when (level) {
-        in low -> Width(30f)
-        in medium -> Width(60f)
-        else -> Width(120f)
+    return when {
+        level >= limit.toInt() -> {
+            Width(limit)
+        }
+        else -> Width(level.toFloat())
     }
 }
+
