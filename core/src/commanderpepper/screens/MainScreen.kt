@@ -11,7 +11,6 @@ import commanderpepper.objects.player.calculateShipPositionWhenTooRight
 import commanderpepper.objects.player.checkPlayerShipDirection
 import commanderpepper.objects.player.fireball.Fireball
 import commanderpepper.objects.player.fireball.FireballBar
-import commanderpepper.objects.player.fireball.FireballLevel
 
 class MainScreen : ApplicationAdapter() {
 
@@ -30,7 +29,9 @@ class MainScreen : ApplicationAdapter() {
     private val fireballBarXCoordinate = XCoordinate(25f)
     private val fireballBarYCoordinate = YCoordinate(25f)
 
-    private var fireBallLevel: Int = 0
+    private var fireballBarLevel: Int = 0
+
+    private var fireballList = mutableListOf<Fireball>()
 
     override fun create() {
 
@@ -66,28 +67,48 @@ class MainScreen : ApplicationAdapter() {
         val playerShip = PlayerShip(shipPoint, shipHeight, shipWidth)
         playerShip.draw()
 
-        fireBallLevel++
-        val fireballBar = FireballBar.createFireballBar(fireBallLevel,
+        fireballBarLevel++
+        val fireballBar = FireballBar.createFireballBar(fireballBarLevel,
                 Point(fireballBarXCoordinate, fireballBarYCoordinate), Height(15f))
         fireballBar.draw()
 
-        if (shoopInput && !fireBallOnScreen) {
+        if (shoopInput && fireballList.size < 6) {
             fireballPoint = playerShip.getFireballPointOrigin(fireballWidth)
             val fireball = Fireball(fireballPoint, fireballHeight, fireballWidth)
-            fireball.draw()
-            fireBallOnScreen = true
-            fireBallLevel = 0
+            fireballList.add(fireball)
+            fireballBarLevel = 0
         }
 
-        if (fireBallOnScreen) {
-            if (!checkIfYCoordianteIsTooHigh(fireballPoint.yCoordinate, fireballHeight)) {
-                fireballPoint = fireballPoint.increaseYCoordiante(fireballYSpeed)
-                val fireball = Fireball(fireballPoint, fireballHeight, fireballWidth)
-                fireball.draw()
-            } else {
-                fireBallOnScreen = false
-            }
+        fireballList.removeAll { fireball ->
+            fireball.checkIfFireballYCoordianteIsTooHigh()
         }
+
+        fireballList.forEach { fireball ->
+            fireball.draw()
+        }
+
+        fireballList = fireballList.map { fireball ->
+            fireball.createFireBall(fireballYSpeed)
+        }.toMutableList()
+
+
+//        if (shoopInput && !fireBallOnScreen) {
+//            fireballPoint = playerShip.getFireballPointOrigin(fireballWidth)
+//            val fireball = Fireball(fireballPoint, fireballHeight, fireballWidth)
+//            fireball.draw()
+//            fireBallOnScreen = true
+//            fireballBarLevel = 0
+//        }
+//
+//        if (fireBallOnScreen) {
+//            if (!checkIfYCoordianteIsTooHigh(fireballPoint.yCoordinate, fireballHeight)) {
+//                fireballPoint = fireballPoint.increaseYCoordiante(fireballYSpeed)
+//                val fireball = Fireball(fireballPoint, fireballHeight, fireballWidth)
+//                fireball.draw()
+//            } else {
+//                fireBallOnScreen = false
+//            }
+//        }
     }
 
 

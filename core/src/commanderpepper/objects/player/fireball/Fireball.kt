@@ -1,12 +1,11 @@
 package commanderpepper.objects.player.fireball
 
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import commanderpepper.interfaces.Drawable
+import commanderpepper.objects.*
 import commanderpepper.objects.baseshapes.Rectangle
-import commanderpepper.objects.Height
-import commanderpepper.objects.Point
-import commanderpepper.objects.Width
 
 class Fireball(
         private val point: Point,
@@ -25,5 +24,14 @@ class Fireball(
             rect(point.xCoordinate.value, point.yCoordinate.value, width.measurement, height.measurement)
             end()
         }
+    }
+
+    fun checkIfFireballYCoordianteIsTooHigh(): Boolean {
+        val gdxHeight = Gdx.graphics.height.toFloat()
+        return point.yCoordinate.value + height.measurement >= gdxHeight
+    }
+
+    fun createFireBall(fireballSpeed: YCoordinate): Fireball {
+        return Fireball(point.increaseYCoordiante(fireballSpeed), height, width)
     }
 }
