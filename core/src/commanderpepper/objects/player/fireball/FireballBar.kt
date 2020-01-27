@@ -16,8 +16,6 @@ class FireballBar private constructor(
         private val height: Height,
         private val width: Width
 ) : Rectangle(point, height, width), Drawable {
-    override val shapeRenderer: ShapeRenderer = ShapeRenderer()
-
 
     override fun draw() {
         shapeRenderer.apply {
@@ -29,6 +27,9 @@ class FireballBar private constructor(
     }
 
     companion object {
+
+        private val shapeRenderer = ShapeRenderer()
+
         fun createFireballBar(level: Int, point: Point, height: Height): FireballBar {
             return FireballBar((::determineFireballBarColor)(level), point, height, (::determineFireballBarWidth)(level))
         }

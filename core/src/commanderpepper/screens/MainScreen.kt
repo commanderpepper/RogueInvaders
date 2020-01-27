@@ -72,7 +72,7 @@ class MainScreen : ApplicationAdapter() {
                 Point(fireballBarXCoordinate, fireballBarYCoordinate), Height(15f))
         fireballBar.draw()
 
-        if (shoopInput && fireballList.size < 6) {
+        if (shoopInput) {
             fireballPoint = playerShip.getFireballPointOrigin(fireballWidth)
             val fireball = Fireball(fireballPoint, fireballHeight, fireballWidth)
             fireballList.add(fireball)
@@ -80,7 +80,7 @@ class MainScreen : ApplicationAdapter() {
         }
 
         fireballList.removeAll { fireball ->
-            fireball.checkIfFireballYCoordianteIsTooHigh()
+            fireball.checkIfFireballYCoordinateIsTooHigh()
         }
 
         fireballList.forEach { fireball ->

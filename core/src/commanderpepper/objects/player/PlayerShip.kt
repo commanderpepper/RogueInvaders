@@ -7,16 +7,13 @@ import commanderpepper.interfaces.Drawable
 import commanderpepper.objects.*
 import commanderpepper.objects.baseshapes.Rectangle
 
-/**
- * This will be like the player ship except that it's going to be functional
- */
 class PlayerShip(
         private val point: Point,
         private val height: Height,
         private val width: Width
 ) : Rectangle(point, height, width), Drawable {
 
-    override val shapeRenderer: ShapeRenderer = ShapeRenderer()
+//    override val shapeRenderer: ShapeRenderer = ShapeRenderer()
 
     override fun draw() {
         shapeRenderer.apply {
@@ -38,6 +35,10 @@ class PlayerShip(
 
     fun getFireballPointOrigin(fireballWidth: Width): Point {
         return Point(getFireballXOrigin(fireballWidth), getFireballYOrigin())
+    }
+
+    companion object {
+        private val shapeRenderer = ShapeRenderer()
     }
 
 }

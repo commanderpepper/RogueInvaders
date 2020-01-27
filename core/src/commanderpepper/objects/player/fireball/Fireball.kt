@@ -15,8 +15,6 @@ class Fireball(
         point, height, width
 ), Drawable {
 
-    override val shapeRenderer: ShapeRenderer = ShapeRenderer()
-
     override fun draw() {
         shapeRenderer.apply {
             begin(ShapeRenderer.ShapeType.Filled)
@@ -26,12 +24,16 @@ class Fireball(
         }
     }
 
-    fun checkIfFireballYCoordianteIsTooHigh(): Boolean {
+    fun checkIfFireballYCoordinateIsTooHigh(): Boolean {
         val gdxHeight = Gdx.graphics.height.toFloat()
         return point.yCoordinate.value + height.measurement >= gdxHeight
     }
 
     fun createFireBall(fireballSpeed: YCoordinate): Fireball {
         return Fireball(point.increaseYCoordiante(fireballSpeed), height, width)
+    }
+
+    companion object {
+        private val shapeRenderer = ShapeRenderer()
     }
 }
