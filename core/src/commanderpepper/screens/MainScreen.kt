@@ -74,7 +74,7 @@ class MainScreen : ApplicationAdapter() {
 
         if (shoopInput) {
             fireballPoint = playerShip.getFireballPointOrigin(fireballWidth)
-            val fireball = Fireball(fireballPoint, fireballHeight, fireballWidth)
+            val fireball = Fireball(fireballBarLevel, fireballPoint, fireballHeight, fireballWidth)
             fireballList.add(fireball)
             fireballBarLevel = 0
         }

@@ -8,6 +8,7 @@ import commanderpepper.objects.*
 import commanderpepper.objects.baseshapes.Rectangle
 
 class Fireball(
+        private val level: Int = 0,
         private val point: Point,
         private val height: Height,
         private val width: Width
@@ -18,7 +19,7 @@ class Fireball(
     override fun draw() {
         shapeRenderer.apply {
             begin(ShapeRenderer.ShapeType.Filled)
-            color = Color.LIGHT_GRAY
+            color = determineColor()
             rect(point.xCoordinate.value, point.yCoordinate.value, width.measurement, height.measurement)
             end()
         }
@@ -30,10 +31,18 @@ class Fireball(
     }
 
     fun createFireBall(fireballSpeed: YCoordinate): Fireball {
-        return Fireball(point.increaseYCoordiante(fireballSpeed), height, width)
+        return Fireball(level, point.increaseYCoordiante(fireballSpeed), height, width)
+    }
+
+    private fun determineColor(): Color {
+        return determineFireballBarColor(level)
     }
 
     companion object {
         private val shapeRenderer = ShapeRenderer()
     }
+}
+
+class FireballLevel(value: Int = 1) {
+
 }
