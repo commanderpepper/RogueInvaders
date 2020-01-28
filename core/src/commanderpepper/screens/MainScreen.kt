@@ -5,6 +5,8 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.GL20
 import commanderpepper.objects.*
+import commanderpepper.objects.enemyship.EnemyShip
+import commanderpepper.objects.enemyship.createEnemyShipMatrix
 import commanderpepper.objects.player.PlayerShip
 import commanderpepper.objects.player.calculateShipPositionWhenTooLeft
 import commanderpepper.objects.player.calculateShipPositionWhenTooRight
@@ -23,7 +25,6 @@ class MainScreen : ApplicationAdapter() {
     private val fireballWidth = Width(8f)
     private val fireballYSpeed = YCoordinate(4f)
 
-    private var fireBallOnScreen = false
     private lateinit var fireballPoint: Point
 
     private val fireballBarXCoordinate = XCoordinate(25f)
@@ -32,9 +33,10 @@ class MainScreen : ApplicationAdapter() {
     private var fireballBarLevel: Int = 0
 
     private var fireballList = mutableListOf<Fireball>()
+    private lateinit var enemyShipList: List<List<EnemyShip>>
 
     override fun create() {
-
+        enemyShipList = createEnemyShipMatrix(2, 8, 10f, 20f)
     }
 
     override fun render() {
@@ -77,6 +79,10 @@ class MainScreen : ApplicationAdapter() {
             val fireball = Fireball(fireballBarLevel, fireballPoint, fireballHeight, fireballWidth)
             fireballList.add(fireball)
             fireballBarLevel = 0
+        }
+
+        enemyShipList.flatten().forEach {
+            it.draw()
         }
 
         fireballList.removeAll { fireball ->

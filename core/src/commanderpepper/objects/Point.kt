@@ -10,6 +10,12 @@ data class YCoordinate(val value: Float)
 
 operator fun YCoordinate.plus(other: YCoordinate) = YCoordinate(value + other.value)
 
+operator fun YCoordinate.minus(other: YCoordinate) = YCoordinate(value - other.value)
+
+operator fun XCoordinate.plus(other: XCoordinate) = XCoordinate(value + other.value)
+
+operator fun XCoordinate.minus(other: XCoordinate) = XCoordinate(value - other.value)
+
 fun checkIfXCoordinateIsTooRight(xCoordinate: XCoordinate, width: Width): Boolean {
     return xCoordinate.value + width.measurement >= Gdx.graphics.width
 }
@@ -26,5 +32,18 @@ fun checkIfYCoordianteIsTooHigh(yCoordinate: YCoordinate, height: Height): Boole
 fun Point.increaseYCoordiante(increment: YCoordinate): Point {
     return Point(xCoordinate, this.yCoordinate + increment)
 }
+
+fun Point.decreaseYCoordiante(decrement: YCoordinate): Point {
+    return Point(xCoordinate, this.yCoordinate - decrement)
+}
+
+fun Point.increaseXCoordiante(increment: XCoordinate): Point {
+    return Point(xCoordinate + increment, this.yCoordinate)
+}
+
+fun Point.decreaseXCoordiante(decrement: XCoordinate): Point {
+    return Point(xCoordinate - decrement, this.yCoordinate)
+}
+
 
 
