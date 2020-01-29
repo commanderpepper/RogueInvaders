@@ -36,7 +36,12 @@ class MainScreen : ApplicationAdapter() {
     private lateinit var enemyShipList: List<List<EnemyShip>>
 
     override fun create() {
-        enemyShipList = createEnemyShipMatrix(2, 8, 10f, 20f)
+        enemyShipList = createEnemyShipMatrix(
+                3,
+                8,
+                YCoordinate(20f),
+                XCoordinate(45f),
+                YCoordinate(45f))
     }
 
     override fun render() {

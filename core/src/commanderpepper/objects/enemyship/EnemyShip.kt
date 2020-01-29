@@ -31,26 +31,31 @@ class EnemyShip(
 
 fun createEnemyShipMatrix(rowSize: Int,
                           columnSize: Int,
-                          verticalSpace: Float,
-                          horizontalSpace: Float): List<List<EnemyShip>> {
+                          verticalSpace: YCoordinate,
+                          sideMargin: XCoordinate,
+                          topMargin: YCoordinate): List<List<EnemyShip>> {
     val shipMatrix = mutableListOf<MutableList<EnemyShip>>()
 
-    val startingXCoordinate = XCoordinate(45f)
-    val startingYCoordinate = YCoordinate(Gdx.graphics.height - 45f)
-    var shipPoint = Point(startingXCoordinate, startingYCoordinate)
+    val leftMostXCoordinate = sideMargin.copy()
+    val rightMostXCoordinate = XCoordinate(Gdx.graphics.width - sideMargin.value)
+
+    val verticalSpaceInBetween = XCoordinate((rightMostXCoordinate.value - leftMostXCoordinate.value) / columnSize)
+
+    val startingYCoordinate = YCoordinate(Gdx.graphics.height - topMargin.value)
+    var shipPoint = Point(leftMostXCoordinate, startingYCoordinate)
 
     val shipHeight = Height(8f)
     val shipWidth = Width(8f)
 
-    for (row in 0..rowSize) {
+    for (row in 0 until rowSize) {
         shipMatrix.add(mutableListOf())
-        for (column in 0..columnSize) {
+        for (column in 0 until columnSize) {
             val enemyShip = EnemyShip(shipPoint, shipHeight, shipWidth)
             shipMatrix[row].add(enemyShip)
-            shipPoint = shipPoint.increaseXCoordiante(XCoordinate(horizontalSpace))
+            shipPoint = shipPoint.increaseXCoordiante(verticalSpaceInBetween)
         }
-        shipPoint = shipPoint.decreaseYCoordiante(YCoordinate(verticalSpace))
-        shipPoint = Point(startingXCoordinate, shipPoint.yCoordinate)
+        shipPoint = shipPoint.decreaseYCoordiante(verticalSpace)
+        shipPoint = Point(leftMostXCoordinate, shipPoint.yCoordinate)
     }
 
     return shipMatrix
