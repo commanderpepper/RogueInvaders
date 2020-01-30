@@ -1,6 +1,6 @@
 # SpaceInvadersDesktop
-I'm trying to make  game using Kotlin and LibGDX. 
-I want to make the code really functional. 
+I'm trying to make a game using Kotlin and LibGDX. 
+I want to make the code really Functional. 
 
 # Functional programming 
 * Functional programming - Functions are worked as values. They can be storied in variables, passed as parameters, or returned from other functions.
