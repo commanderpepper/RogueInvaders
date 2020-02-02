@@ -69,5 +69,6 @@ project(":core") {
 
         //KTX
         compile "io.github.libktx:ktx-app:$ktxVersion"
+
     }
 }

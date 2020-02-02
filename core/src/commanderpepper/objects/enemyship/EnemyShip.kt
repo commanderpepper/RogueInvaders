@@ -24,6 +24,26 @@ class EnemyShip(
         }
     }
 
+    fun moveShip(point: Point): EnemyShip {
+        return EnemyShip(point, this.height, this.width)
+    }
+
+    fun moveShip(yCoordinate: YCoordinate): EnemyShip {
+        return EnemyShip(Point(this.point.xCoordinate, this.point.yCoordinate + yCoordinate), this.height, this.width)
+    }
+
+    fun moveShip(xCoordinate: XCoordinate): EnemyShip {
+        return EnemyShip(Point(this.point.xCoordinate + xCoordinate, this.point.yCoordinate), this.height, this.width)
+    }
+
+    fun checkIfEnemyShipIsTooLeft(): Boolean {
+        return checkIfXCoordinateIsTooLeft(xCoordinate = point.xCoordinate)
+    }
+
+    fun checkIfEnemyShipIsTooRight(): Boolean {
+        return checkIfXCoordinateIsTooRight(xCoordinate = point.xCoordinate, width = width)
+    }
+
     companion object {
         val shapeRenderer = ShapeRenderer()
     }
@@ -33,7 +53,9 @@ fun createEnemyShipMatrix(rowSize: Int,
                           columnSize: Int,
                           verticalSpace: YCoordinate,
                           sideMargin: XCoordinate,
-                          topMargin: YCoordinate): List<List<EnemyShip>> {
+                          topMargin: YCoordinate,
+                          shipHeight: Height = Height(8f),
+                          shipWidth: Width = Width(8f)): List<List<EnemyShip>> {
     val shipMatrix = mutableListOf<MutableList<EnemyShip>>()
 
     val leftMostXCoordinate = sideMargin.copy()
@@ -41,11 +63,8 @@ fun createEnemyShipMatrix(rowSize: Int,
 
     val verticalSpaceInBetween = XCoordinate((rightMostXCoordinate.value - leftMostXCoordinate.value) / columnSize)
 
-    val startingYCoordinate = YCoordinate(Gdx.graphics.height - topMargin.value)
+    val startingYCoordinate = YCoordinate(Gdx.graphics.height.toFloat()) - topMargin
     var shipPoint = Point(leftMostXCoordinate, startingYCoordinate)
-
-    val shipHeight = Height(8f)
-    val shipWidth = Width(8f)
 
     for (row in 0 until rowSize) {
         shipMatrix.add(mutableListOf())

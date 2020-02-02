@@ -5,7 +5,9 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.GL20
 import commanderpepper.objects.*
+import commanderpepper.objects.enemyship.EnemyDirection
 import commanderpepper.objects.enemyship.EnemyShip
+import commanderpepper.objects.enemyship.EnemyShipController
 import commanderpepper.objects.enemyship.createEnemyShipMatrix
 import commanderpepper.objects.player.PlayerShip
 import commanderpepper.objects.player.calculateShipPositionWhenTooLeft
@@ -35,6 +37,10 @@ class MainScreen : ApplicationAdapter() {
     private var fireballList = mutableListOf<Fireball>()
     private lateinit var enemyShipList: List<List<EnemyShip>>
 
+    private lateinit var enemyShipController: EnemyShipController
+
+    private var enemyDirection = EnemyDirection.RIGHT
+
     override fun create() {
         enemyShipList = createEnemyShipMatrix(
                 3,
@@ -42,6 +48,11 @@ class MainScreen : ApplicationAdapter() {
                 YCoordinate(20f),
                 XCoordinate(45f),
                 YCoordinate(45f))
+        enemyShipController = EnemyShipController(
+                XCoordinate(0f),
+                XCoordinate(Gdx.graphics.width.toFloat()),
+                1f
+        )
     }
 
     override fun render() {
@@ -86,6 +97,10 @@ class MainScreen : ApplicationAdapter() {
             fireballBarLevel = 0
         }
 
+        enemyDirection = enemyShipController.checkNextDirection(enemyDirection, enemyShipList)
+
+        enemyShipList = enemyShipController.moveEnemyShips(enemyDirection, enemyShipList)
+
         enemyShipList.flatten().forEach {
             it.draw()
         }
@@ -101,25 +116,6 @@ class MainScreen : ApplicationAdapter() {
         fireballList = fireballList.map { fireball ->
             fireball.createFireBall(fireballYSpeed)
         }.toMutableList()
-
-
-//        if (shoopInput && !fireBallOnScreen) {
-//            fireballPoint = playerShip.getFireballPointOrigin(fireballWidth)
-//            val fireball = Fireball(fireballPoint, fireballHeight, fireballWidth)
-//            fireball.draw()
-//            fireBallOnScreen = true
-//            fireballBarLevel = 0
-//        }
-//
-//        if (fireBallOnScreen) {
-//            if (!checkIfYCoordianteIsTooHigh(fireballPoint.yCoordinate, fireballHeight)) {
-//                fireballPoint = fireballPoint.increaseYCoordiante(fireballYSpeed)
-//                val fireball = Fireball(fireballPoint, fireballHeight, fireballWidth)
-//                fireball.draw()
-//            } else {
-//                fireBallOnScreen = false
-//            }
-//        }
     }
 
 
