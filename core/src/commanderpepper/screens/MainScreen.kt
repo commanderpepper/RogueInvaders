@@ -37,6 +37,7 @@ class MainScreen : ApplicationAdapter() {
     private var fireballList = mutableListOf<Fireball>()
     private lateinit var enemyShipList: List<List<EnemyShip>>
 
+    private var speed: Float = .001f
     private lateinit var enemyShipController: EnemyShipController
 
     private var enemyDirection = EnemyDirection.RIGHT
@@ -51,7 +52,7 @@ class MainScreen : ApplicationAdapter() {
         enemyShipController = EnemyShipController(
                 XCoordinate(0f),
                 XCoordinate(Gdx.graphics.width.toFloat()),
-                1f
+                speed
         )
     }
 
@@ -101,6 +102,15 @@ class MainScreen : ApplicationAdapter() {
 
         enemyShipList = enemyShipController.moveEnemyShips(enemyDirection, enemyShipList)
 
+
+        speed += .001f
+
+        enemyShipController = EnemyShipController(
+                XCoordinate(0f),
+                XCoordinate(Gdx.graphics.width.toFloat()),
+                speed
+        )
+
         enemyShipList.flatten().forEach {
             it.draw()
         }
@@ -117,6 +127,4 @@ class MainScreen : ApplicationAdapter() {
             fireball.createFireBall(fireballYSpeed)
         }.toMutableList()
     }
-
-
 }

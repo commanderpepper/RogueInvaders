@@ -8,20 +8,23 @@ class EnemyShipController(
         private val rightMargin: XCoordinate,
         private val speed: Float) {
 
-    fun checkNextDirection(enemyDirection: EnemyDirection, enemyShipMatrix: List<List<EnemyShip>>): EnemyDirection {
-        val leftMostShips = mutableListOf<EnemyShip>()
-        enemyShipMatrix.forEach { row ->
-            leftMostShips.addAll(row.filterIndexed { index, _ ->
-                index == 0
-            })
-        }
+    private fun calculateDownwardMovement(): YCoordinate {
+        return YCoordinate(speed * -1)
+    }
 
-        val rightMostShips = mutableListOf<EnemyShip>()
-        enemyShipMatrix.forEach { row ->
-            rightMostShips.addAll(row.filterIndexed { index, _ ->
-                index == row.size - 1
-            })
-        }
+    private fun calculateLeftMovement(): XCoordinate {
+        return XCoordinate(speed * -1)
+    }
+
+    private fun calculateRightMovement(): XCoordinate {
+        return XCoordinate(speed)
+    }
+
+    fun checkNextDirection(enemyDirection: EnemyDirection, enemyShipMatrix: List<List<EnemyShip>>): EnemyDirection {
+        val leftMostShips = getShipsUsingIndex(enemyShipMatrix) { it == 0 }
+
+//        val rightMostShips = rightMostShips(enemyShipMatrix)
+        val rightMostShips = getShipsUsingIndex(enemyShipMatrix) {it == -1}
 
         val isTooLeft = leftMostShips.map {
             it.moveShip(XCoordinate(speed * -1))
@@ -50,51 +53,51 @@ class EnemyShipController(
         return enemyDirection
     }
 
-    fun moveEnemyShips(enemyDirection: EnemyDirection, enemyShipMatrix: List<List<EnemyShip>>): List<List<EnemyShip>> {
-        val leftMostShips = mutableListOf<EnemyShip>()
-        enemyShipMatrix.forEach { row ->
-            leftMostShips.addAll(row.filterIndexed { index, _ ->
-                index == 0
-            })
-        }
 
-        val rightMostShips = mutableListOf<EnemyShip>()
+    fun moveEnemyShips(enemyDirection: EnemyDirection, enemyShipMatrix: List<List<EnemyShip>>): List<List<EnemyShip>> {
+        return when (enemyDirection) {
+            EnemyDirection.RIGHT -> animateEnemyShipsHorizontally(enemyShipMatrix, calculateRightMovement())
+            EnemyDirection.LEFT -> animateEnemyShipsHorizontally(enemyShipMatrix, calculateLeftMovement())
+            EnemyDirection.DOWN -> animateEnemyShipsVertically(enemyShipMatrix, calculateDownwardMovement())
+            else -> enemyShipMatrix
+        }
+    }
+
+    private fun rightMostShips(enemyShipMatrix: List<List<EnemyShip>>): MutableList<EnemyShip> {
+        val ships = mutableListOf<EnemyShip>()
         enemyShipMatrix.forEach { row ->
-            rightMostShips.addAll(row.filterIndexed { index, _ ->
+            ships.addAll(row.filterIndexed { index, _ ->
                 index == row.size - 1
             })
         }
+        return ships
+    }
 
-        if (enemyDirection == EnemyDirection.RIGHT) {
-            return animateEnemyShipsHorizontally(enemyShipMatrix, 2f)
+    private fun getShipsUsingIndex(enemyShipMatrix: List<List<EnemyShip>>,
+                                   predicate: (Int) -> Boolean): MutableList<EnemyShip> {
+        val ships = mutableListOf<EnemyShip>()
+        enemyShipMatrix.forEach { row ->
+            ships.addAll(row.filterIndexed { index, _ ->
+                predicate(index)
+            })
         }
-
-        if (enemyDirection == EnemyDirection.LEFT) {
-            return animateEnemyShipsHorizontally(enemyShipMatrix, -2f)
-        }
-
-        if (enemyDirection == EnemyDirection.DOWN) {
-            return animateEnemyShipsVertically(enemyShipMatrix, -6f)
-        }
-
-        return enemyShipMatrix
-
+        return ships
     }
 
     companion object {
-        
-        private fun animateEnemyShipsHorizontally(enemyShipMatrix: List<List<EnemyShip>>, speed: Float): List<List<EnemyShip>> {
+
+        private fun animateEnemyShipsHorizontally(enemyShipMatrix: List<List<EnemyShip>>, xCoordinate: XCoordinate): List<List<EnemyShip>> {
             return enemyShipMatrix.map {
                 it.map { enemyShip ->
-                    enemyShip.moveShip(XCoordinate(speed))
+                    enemyShip.moveShip(xCoordinate)
                 }
             }
         }
 
-        private fun animateEnemyShipsVertically(enemyShipMatrix: List<List<EnemyShip>>, speed: Float): List<List<EnemyShip>> {
+        private fun animateEnemyShipsVertically(enemyShipMatrix: List<List<EnemyShip>>, yCoordinate: YCoordinate): List<List<EnemyShip>> {
             return enemyShipMatrix.map {
                 it.map { enemyShip ->
-                    enemyShip.moveShip(YCoordinate(speed))
+                    enemyShip.moveShip(yCoordinate)
                 }
             }
         }
