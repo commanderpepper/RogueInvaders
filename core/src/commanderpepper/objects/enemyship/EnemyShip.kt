@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import commanderpepper.interfaces.Drawable
 import commanderpepper.objects.*
 import commanderpepper.objects.baseshapes.Rectangle
+import commanderpepper.objects.player.fireball.Fireball
 
 class EnemyShip(
         private val point: Point,
@@ -42,6 +43,10 @@ class EnemyShip(
 
     fun checkIfEnemyShipIsTooRight(): Boolean {
         return checkIfXCoordinateIsTooRight(xCoordinate = point.xCoordinate, width = width)
+    }
+
+    fun checkForFireballCollision(fireball: Fireball): Boolean {
+        return fireball.checkForEnemyCollision(point, height, width)
     }
 
     companion object {

@@ -45,5 +45,20 @@ fun Point.decreaseXCoordiante(decrement: XCoordinate): Point {
     return Point(xCoordinate - decrement, this.yCoordinate)
 }
 
+fun Point.isInContact(thisHeight: Height, otherPoint: Point, otherHeight: Height): Boolean {
+
+    val otherPointYValue = otherPoint.yCoordinate.value
+    val pointBHeightRange = otherPointYValue..otherPointYValue + otherHeight.measurement
+
+    return this.yCoordinate.value in pointBHeightRange || this.yCoordinate.value + thisHeight.measurement in pointBHeightRange
+}
+
+fun Point.isInContact(thisWidth: Width, otherPoint: Point, otherWidth: Width): Boolean {
+    val otherPointXValue = otherPoint.xCoordinate.value
+    val pointBWidthRange = otherPointXValue..otherPointXValue + otherWidth.measurement
+
+    return this.xCoordinate.value in pointBWidthRange || this.xCoordinate.value + thisWidth.measurement in pointBWidthRange
+}
+
 
 

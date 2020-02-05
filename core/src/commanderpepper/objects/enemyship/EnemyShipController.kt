@@ -23,8 +23,7 @@ class EnemyShipController(
     fun checkNextDirection(enemyDirection: EnemyDirection, enemyShipMatrix: List<List<EnemyShip>>): EnemyDirection {
         val leftMostShips = getShipsUsingIndex(enemyShipMatrix) { it == 0 }
 
-//        val rightMostShips = rightMostShips(enemyShipMatrix)
-        val rightMostShips = getShipsUsingIndex(enemyShipMatrix) {it == -1}
+        val rightMostShips = rightMostShips(enemyShipMatrix)
 
         val isTooLeft = leftMostShips.map {
             it.moveShip(XCoordinate(speed * -1))

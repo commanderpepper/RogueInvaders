@@ -8,7 +8,4 @@ open class Rectangle(
         private val point: Point,
         private val height: Height,
         private val width: Width
-) {
-
-
-}
+)

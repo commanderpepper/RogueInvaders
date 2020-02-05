@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import commanderpepper.interfaces.Drawable
 import commanderpepper.objects.*
 import commanderpepper.objects.baseshapes.Rectangle
+import commanderpepper.objects.enemyship.EnemyShip
 
 class Fireball(
         private val level: Int = 0,
@@ -38,10 +39,16 @@ class Fireball(
         return determineFireballBarColor(level)
     }
 
+    fun checkForEnemyCollision(enemyPoint: Point, enemyHeight: Height, enemyWidth: Width): Boolean {
+        return point.isInContact(height, enemyPoint, enemyHeight) && point.isInContact(width, enemyPoint, enemyWidth)
+    }
+
+
     companion object {
         private val shapeRenderer = ShapeRenderer()
     }
 }
+
 
 class FireballLevel(value: Int = 1) {
 

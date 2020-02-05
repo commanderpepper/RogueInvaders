@@ -24,7 +24,7 @@ class MainScreen : ApplicationAdapter() {
     private val shipWidth = Width(25f)
 
     private val fireballHeight = Height(8f)
-    private val fireballWidth = Width(8f)
+    private val fireballWidth = Width(6f)
     private val fireballYSpeed = YCoordinate(4f)
 
     private lateinit var fireballPoint: Point
@@ -35,7 +35,8 @@ class MainScreen : ApplicationAdapter() {
     private var fireballBarLevel: Int = 0
 
     private var fireballList = mutableListOf<Fireball>()
-    private lateinit var enemyShipList: List<List<EnemyShip>>
+
+    private lateinit var enemyShipList: List<MutableList<EnemyShip>>
 
     private var speed: Float = .001f
     private lateinit var enemyShipController: EnemyShipController
@@ -48,7 +49,9 @@ class MainScreen : ApplicationAdapter() {
                 8,
                 YCoordinate(20f),
                 XCoordinate(45f),
-                YCoordinate(45f))
+                YCoordinate(45f)).map {
+            it.toMutableList()
+        }
         enemyShipController = EnemyShipController(
                 XCoordinate(0f),
                 XCoordinate(Gdx.graphics.width.toFloat()),
@@ -98,10 +101,13 @@ class MainScreen : ApplicationAdapter() {
             fireballBarLevel = 0
         }
 
+        fireballList.removeAll { fireball ->
+            fireball.checkIfFireballYCoordinateIsTooHigh()
+        }
+
         enemyDirection = enemyShipController.checkNextDirection(enemyDirection, enemyShipList)
 
-        enemyShipList = enemyShipController.moveEnemyShips(enemyDirection, enemyShipList)
-
+        enemyShipList = enemyShipController.moveEnemyShips(enemyDirection, enemyShipList).map { it.toMutableList() }
 
         speed += .001f
 
@@ -111,12 +117,17 @@ class MainScreen : ApplicationAdapter() {
                 speed
         )
 
-        enemyShipList.flatten().forEach {
-            it.draw()
+        enemyShipList.forEachIndexed { index, shipRow ->
+            shipRow.zip(fireballList).forEachIndexed { sindex, pair ->
+                if (pair.first.checkForFireballCollision(pair.second)) {
+                    enemyShipList[index].removeAt(sindex)
+                    fireballList.remove(pair.second)
+                }
+            }
         }
 
-        fireballList.removeAll { fireball ->
-            fireball.checkIfFireballYCoordinateIsTooHigh()
+        enemyShipList.flatten().forEach {
+            it.draw()
         }
 
         fireballList.forEach { fireball ->
