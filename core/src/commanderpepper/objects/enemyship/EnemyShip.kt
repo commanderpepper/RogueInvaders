@@ -59,8 +59,8 @@ fun createEnemyShipMatrix(rowSize: Int,
                           verticalSpace: YCoordinate,
                           sideMargin: XCoordinate,
                           topMargin: YCoordinate,
-                          shipHeight: Height = Height(8f),
-                          shipWidth: Width = Width(8f)): List<List<EnemyShip>> {
+                          shipHeight: Height = Height(12f),
+                          shipWidth: Width = Width(14f)): List<List<EnemyShip>> {
     val shipMatrix = mutableListOf<MutableList<EnemyShip>>()
 
     val leftMostXCoordinate = sideMargin.copy()

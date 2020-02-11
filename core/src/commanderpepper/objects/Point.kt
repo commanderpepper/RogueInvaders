@@ -45,19 +45,34 @@ fun Point.decreaseXCoordiante(decrement: XCoordinate): Point {
     return Point(xCoordinate - decrement, this.yCoordinate)
 }
 
-fun Point.isInContact(thisHeight: Height, otherPoint: Point, otherHeight: Height): Boolean {
+fun Point.isInContact(thisHeight: Height, otherPoint: Point, otherHeight: Height, leeway: Float = 16f): Boolean {
 
+    val thisPointYValue = this.yCoordinate.value
     val otherPointYValue = otherPoint.yCoordinate.value
-    val pointBHeightRange = otherPointYValue..otherPointYValue + otherHeight.measurement
 
-    return this.yCoordinate.value in pointBHeightRange || this.yCoordinate.value + thisHeight.measurement in pointBHeightRange
+    val thisPointHeight = thisHeight.measurement - leeway * 2
+    val otherPointHeight = otherHeight.measurement - leeway * 2
+
+    val thisHighYValue = thisPointYValue + thisPointHeight + leeway * 3
+    val otherHighYValue = otherPointYValue + otherPointHeight + leeway * 3
+
+    return thisPointYValue in otherPointYValue..otherHighYValue || otherHighYValue in thisPointYValue..thisHighYValue
+
 }
 
-fun Point.isInContact(thisWidth: Width, otherPoint: Point, otherWidth: Width): Boolean {
-    val otherPointXValue = otherPoint.xCoordinate.value
-    val pointBWidthRange = otherPointXValue..otherPointXValue + otherWidth.measurement
+fun Point.isInContact(thisWidth: Width, otherPoint: Point, otherWidth: Width, leeway: Float = 16f): Boolean {
 
-    return this.xCoordinate.value in pointBWidthRange || this.xCoordinate.value + thisWidth.measurement in pointBWidthRange
+    val thisPointXValue = this.xCoordinate.value
+    val otherPointXValue = otherPoint.xCoordinate.value
+
+    val thisPointWidth = thisWidth.measurement - leeway * 2
+    val otherPointWidth = otherWidth.measurement - leeway * 2
+
+    val thisHighXValue = thisPointXValue + thisPointWidth + leeway * 3
+    val otherHighXValue = otherPointXValue + otherPointWidth + leeway * 3
+
+    return thisPointXValue in otherPointXValue..otherHighXValue || otherHighXValue in thisPointXValue..thisHighXValue
+
 }
 
 

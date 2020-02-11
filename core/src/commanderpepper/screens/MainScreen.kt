@@ -15,6 +15,7 @@ import commanderpepper.objects.player.calculateShipPositionWhenTooRight
 import commanderpepper.objects.player.checkPlayerShipDirection
 import commanderpepper.objects.player.fireball.Fireball
 import commanderpepper.objects.player.fireball.FireballBar
+import commanderpepper.objects.player.fireball.createFireball
 
 class MainScreen : ApplicationAdapter() {
 
@@ -38,7 +39,7 @@ class MainScreen : ApplicationAdapter() {
 
     private lateinit var enemyShipList: List<MutableList<EnemyShip>>
 
-    private var speed: Float = .001f
+    private var speed: Float = .00001f
     private lateinit var enemyShipController: EnemyShipController
 
     private var enemyDirection = EnemyDirection.RIGHT
@@ -96,7 +97,8 @@ class MainScreen : ApplicationAdapter() {
 
         if (shoopInput) {
             fireballPoint = playerShip.getFireballPointOrigin(fireballWidth)
-            val fireball = Fireball(fireballBarLevel, fireballPoint, fireballHeight, fireballWidth)
+//            val fireball = Fireball(fireballBarLevel, fireballPoint, fireballHeight, fireballWidth)
+            val fireball = createFireball(fireballBarLevel, fireballPoint, fireballHeight, fireballWidth)
             fireballList.add(fireball)
             fireballBarLevel = 0
         }
@@ -109,7 +111,7 @@ class MainScreen : ApplicationAdapter() {
 
         enemyShipList = enemyShipController.moveEnemyShips(enemyDirection, enemyShipList).map { it.toMutableList() }
 
-        speed += .001f
+        speed += .0001f
 
         enemyShipController = EnemyShipController(
                 XCoordinate(0f),
@@ -117,10 +119,10 @@ class MainScreen : ApplicationAdapter() {
                 speed
         )
 
-        enemyShipList.forEachIndexed { index, shipRow ->
-            shipRow.zip(fireballList).forEachIndexed { sindex, pair ->
+        enemyShipList.forEachIndexed { rowIndex, shipRow ->
+            shipRow.zip(fireballList).forEachIndexed { columnIndex, pair ->
                 if (pair.first.checkForFireballCollision(pair.second)) {
-                    enemyShipList[index].removeAt(sindex)
+                    enemyShipList[rowIndex].removeAt(columnIndex)
                     fireballList.remove(pair.second)
                 }
             }
