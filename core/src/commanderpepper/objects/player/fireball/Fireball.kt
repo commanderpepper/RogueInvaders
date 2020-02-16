@@ -3,6 +3,7 @@ package commanderpepper.objects.player.fireball
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
+import com.badlogic.gdx.math.Intersector
 import commanderpepper.interfaces.Drawable
 import commanderpepper.objects.*
 import commanderpepper.objects.baseshapes.Rectangle
@@ -39,12 +40,10 @@ class Fireball(
     }
 
     fun checkForEnemyCollision(enemyPoint: Point, enemyHeight: Height, enemyWidth: Width): Boolean {
-        val leeway = when {
-            level in 61..120 -> 18f
-            level > 121 -> 20f
-            else -> 16f
-        }
-        return point.isInContact(height, enemyPoint, enemyHeight, leeway) && point.isInContact(width, enemyPoint, enemyWidth, leeway)
+        val fireballRect = com.badlogic.gdx.math.Rectangle(this.point.xCoordinate.value, this.point.yCoordinate.value, this.width.measurement, this.height.measurement)
+        val enemyShipRect = com.badlogic.gdx.math.Rectangle(enemyPoint.xCoordinate.value, enemyPoint.yCoordinate.value, enemyWidth.measurement, enemyHeight.measurement)
+        
+        return Intersector.intersectRectangles(fireballRect, enemyShipRect, fireballRect)
     }
 
     companion object {
