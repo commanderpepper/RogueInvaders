@@ -42,8 +42,15 @@ class Fireball(
     fun checkForEnemyCollision(enemyPoint: Point, enemyHeight: Height, enemyWidth: Width): Boolean {
         val fireballRect = com.badlogic.gdx.math.Rectangle(this.point.xCoordinate.value, this.point.yCoordinate.value, this.width.measurement, this.height.measurement)
         val enemyShipRect = com.badlogic.gdx.math.Rectangle(enemyPoint.xCoordinate.value, enemyPoint.yCoordinate.value, enemyWidth.measurement, enemyHeight.measurement)
-        
-        return Intersector.intersectRectangles(fireballRect, enemyShipRect, fireballRect)
+
+        return rectOverlaps(fireballRect, enemyShipRect)
+    }
+
+    /**
+     * @return whether this rectangle overlaps the other rectangle.
+     */
+    private fun rectOverlaps(r1: com.badlogic.gdx.math.Rectangle, r2: com.badlogic.gdx.math.Rectangle): Boolean {
+        return r1.x < r2.x + r2.width && r1.x + r1.width > r2.x && r1.y < r2.y + r2.height && r1.y + r1.height > r2.y
     }
 
     companion object {

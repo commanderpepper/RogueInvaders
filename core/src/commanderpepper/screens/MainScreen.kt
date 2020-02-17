@@ -16,6 +16,7 @@ import commanderpepper.objects.player.checkPlayerShipDirection
 import commanderpepper.objects.player.fireball.Fireball
 import commanderpepper.objects.player.fireball.FireballBar
 import commanderpepper.objects.player.fireball.createFireball
+import commanderpepper.objects.player.score.Score
 
 class MainScreen : ApplicationAdapter() {
 
@@ -44,7 +45,14 @@ class MainScreen : ApplicationAdapter() {
 
     private var enemyDirection = EnemyDirection.RIGHT
 
+    private val scoreXCoordinate = XCoordinate(350f)
+    private val scoreYCoordinate = YCoordinate(890f)
+    private lateinit var score: Score
+
     override fun create() {
+
+        score = Score(scoreXCoordinate, scoreYCoordinate)
+
         enemyShipList = createEnemyShipMatrix(
                 3,
                 8,
@@ -97,7 +105,6 @@ class MainScreen : ApplicationAdapter() {
 
         if (shoopInput) {
             fireballPoint = playerShip.getFireballPointOrigin(fireballWidth)
-//            val fireball = Fireball(fireballBarLevel, fireballPoint, fireballHeight, fireballWidth)
             val fireball = createFireball(fireballBarLevel, fireballPoint, fireballHeight, fireballWidth)
             fireballList.add(fireball)
             fireballBarLevel = 0
@@ -124,6 +131,7 @@ class MainScreen : ApplicationAdapter() {
                 if (pair.first.checkForFireballCollision(pair.second)) {
                     enemyShipList[rowIndex].removeAt(columnIndex)
                     fireballList.remove(pair.second)
+                    score = score.increaseScore(3.0)
                 }
             }
         }
@@ -139,5 +147,7 @@ class MainScreen : ApplicationAdapter() {
         fireballList = fireballList.map { fireball ->
             fireball.createFireBall(fireballYSpeed)
         }.toMutableList()
+
+        score.draw()
     }
 }
