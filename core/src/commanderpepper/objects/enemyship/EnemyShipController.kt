@@ -1,7 +1,8 @@
 package commanderpepper.objects.enemyship
 
-import commanderpepper.objects.XCoordinate
-import commanderpepper.objects.YCoordinate
+import commanderpepper.objects.*
+import commanderpepper.objects.player.fireball.Fireball
+import kotlin.random.Random
 
 class EnemyShipController(
         private val leftMargin: XCoordinate,
@@ -82,6 +83,25 @@ class EnemyShipController(
         }
         return ships
     }
+
+    fun createFireballsFromEnemyShips(fireballWidth: Width, fireballHeight: Height, randomChance: Int, enemyShipMatrix: List<List<EnemyShip>>): List<Fireball> {
+        val enemyShips = enemyShipMatrix.flatten()
+        val fireBallList = mutableListOf<Fireball>()
+
+
+
+        enemyShips.forEach {
+            val enemyNumber = Random.nextInt(0, Int.MAX_VALUE)
+            val intMax = Int.MAX_VALUE
+            val result = intMax - enemyNumber
+            if (result <= randomChance) {
+                fireBallList.add(Fireball(0, it.getFireballPointOrigin(fireballWidth), fireballHeight, fireballWidth))
+            }
+        }
+
+        return fireBallList
+    }
+
 
     companion object {
 

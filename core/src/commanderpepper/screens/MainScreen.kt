@@ -29,6 +29,12 @@ class MainScreen : ApplicationAdapter() {
     private val fireballWidth = Width(6f)
     private val fireballYSpeed = YCoordinate(4f)
 
+    private val enemyFireballHeight = Height(6f)
+    private val enemyFireballWidth = Width(6f)
+    private val enemyFireballYSpeed = YCoordinate(-3.5f)
+
+    private var enemyFireballList: MutableList<Fireball> = mutableListOf()
+
     private lateinit var fireballPoint: Point
 
     private val fireballBarXCoordinate = XCoordinate(25f)
@@ -40,7 +46,7 @@ class MainScreen : ApplicationAdapter() {
 
     private lateinit var enemyShipList: List<MutableList<EnemyShip>>
 
-    private var speed: Float = .00001f
+    private var speed: Float = .0001f
     private lateinit var enemyShipController: EnemyShipController
 
     private var enemyDirection = EnemyDirection.RIGHT
@@ -114,6 +120,12 @@ class MainScreen : ApplicationAdapter() {
             fireball.checkIfFireballYCoordinateIsTooHigh()
         }
 
+        enemyFireballList.addAll(
+                enemyShipController.createFireballsFromEnemyShips(
+                        enemyFireballWidth, enemyFireballHeight, 5000000, enemyShipList
+                )
+        )
+
         enemyDirection = enemyShipController.checkNextDirection(enemyDirection, enemyShipList)
 
         enemyShipList = enemyShipController.moveEnemyShips(enemyDirection, enemyShipList).map { it.toMutableList() }
@@ -144,8 +156,16 @@ class MainScreen : ApplicationAdapter() {
             fireball.draw()
         }
 
+        enemyFireballList.forEach {
+            it.draw()
+        }
+
         fireballList = fireballList.map { fireball ->
             fireball.createFireBall(fireballYSpeed)
+        }.toMutableList()
+
+        enemyFireballList = enemyFireballList.map { fireball ->
+            fireball.createFireBall(enemyFireballYSpeed)
         }.toMutableList()
 
         score.draw()

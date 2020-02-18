@@ -49,6 +49,19 @@ class EnemyShip(
         return fireball.checkForEnemyCollision(point, height, width)
     }
 
+    private fun getFireballXOrigin(fireballWidth: Width): XCoordinate {
+        return XCoordinate(point.xCoordinate.value +
+                ((width.measurement / 2) - (fireballWidth.measurement / 2)))
+    }
+
+    private fun getFireballYOrigin(): YCoordinate {
+        return YCoordinate(point.yCoordinate.value + height.measurement)
+    }
+
+    fun getFireballPointOrigin(fireballWidth: Width): Point {
+        return Point(getFireballXOrigin(fireballWidth), getFireballYOrigin())
+    }
+
     companion object {
         val shapeRenderer = ShapeRenderer()
     }
