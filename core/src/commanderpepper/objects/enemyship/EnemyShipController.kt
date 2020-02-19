@@ -88,8 +88,6 @@ class EnemyShipController(
         val enemyShips = enemyShipMatrix.flatten()
         val fireBallList = mutableListOf<Fireball>()
 
-
-
         enemyShips.forEach {
             val enemyNumber = Random.nextInt(0, Int.MAX_VALUE)
             val intMax = Int.MAX_VALUE

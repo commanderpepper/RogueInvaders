@@ -122,7 +122,7 @@ class MainScreen : ApplicationAdapter() {
 
         enemyFireballList.addAll(
                 enemyShipController.createFireballsFromEnemyShips(
-                        enemyFireballWidth, enemyFireballHeight, 5000000, enemyShipList
+                        enemyFireballWidth, enemyFireballHeight, 4000000, enemyShipList
                 )
         )
 
@@ -145,6 +145,14 @@ class MainScreen : ApplicationAdapter() {
                     fireballList.remove(pair.second)
                     score = score.increaseScore(3.0)
                 }
+            }
+        }
+
+        for (i in 0 until enemyFireballList.size) {
+            if (playerShip.checkForFireballCollision(enemyFireballList[i])) {
+                enemyFireballList.removeAt(i)
+                println("Fireball removed")
+                break
             }
         }
 

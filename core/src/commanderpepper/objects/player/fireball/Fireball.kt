@@ -46,6 +46,13 @@ class Fireball(
         return rectOverlaps(fireballRect, enemyShipRect)
     }
 
+    fun checkForCollision(otherPoint: Point, otherHeight: Height, otherWidth: Width): Boolean {
+        val fireballRect = com.badlogic.gdx.math.Rectangle(this.point.xCoordinate.value, this.point.yCoordinate.value, this.width.measurement, this.height.measurement)
+        val otherRect = com.badlogic.gdx.math.Rectangle(otherPoint.xCoordinate.value, otherPoint.yCoordinate.value, otherWidth.measurement, otherHeight.measurement)
+
+        return rectOverlaps(fireballRect, otherRect)
+    }
+
     /**
      * @return whether this rectangle overlaps the other rectangle.
      */

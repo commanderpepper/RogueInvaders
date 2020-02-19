@@ -55,7 +55,7 @@ class EnemyShip(
     }
 
     private fun getFireballYOrigin(): YCoordinate {
-        return YCoordinate(point.yCoordinate.value + height.measurement)
+        return YCoordinate(point.yCoordinate.value)
     }
 
     fun getFireballPointOrigin(fireballWidth: Width): Point {

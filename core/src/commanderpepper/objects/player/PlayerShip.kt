@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import commanderpepper.interfaces.Drawable
 import commanderpepper.objects.*
 import commanderpepper.objects.baseshapes.Rectangle
+import commanderpepper.objects.player.fireball.Fireball
 
 class PlayerShip(
         private val point: Point,
@@ -35,6 +36,10 @@ class PlayerShip(
 
     fun getFireballPointOrigin(fireballWidth: Width): Point {
         return Point(getFireballXOrigin(fireballWidth), getFireballYOrigin())
+    }
+
+    fun checkForFireballCollision(fireball: Fireball): Boolean {
+        return fireball.checkForCollision(this.point, this.height, this.width)
     }
 
     companion object {
