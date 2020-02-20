@@ -16,6 +16,7 @@ import commanderpepper.objects.player.checkPlayerShipDirection
 import commanderpepper.objects.player.fireball.Fireball
 import commanderpepper.objects.player.fireball.FireballBar
 import commanderpepper.objects.player.fireball.createFireball
+import commanderpepper.objects.player.life.Life
 import commanderpepper.objects.player.score.Score
 
 class MainScreen : ApplicationAdapter() {
@@ -55,9 +56,15 @@ class MainScreen : ApplicationAdapter() {
     private val scoreYCoordinate = YCoordinate(890f)
     private lateinit var score: Score
 
+    private val lifeXCoordinate = XCoordinate(50f)
+    private val lifeYCoordinate = YCoordinate(890f)
+    private lateinit var life: Life
+
     override fun create() {
 
         score = Score(scoreXCoordinate, scoreYCoordinate)
+
+        life = Life(lifeXCoordinate, lifeYCoordinate)
 
         enemyShipList = createEnemyShipMatrix(
                 3,
@@ -151,7 +158,7 @@ class MainScreen : ApplicationAdapter() {
         for (i in 0 until enemyFireballList.size) {
             if (playerShip.checkForFireballCollision(enemyFireballList[i])) {
                 enemyFireballList.removeAt(i)
-                println("Fireball removed")
+                life = life.removeLife()
                 break
             }
         }
@@ -177,5 +184,7 @@ class MainScreen : ApplicationAdapter() {
         }.toMutableList()
 
         score.draw()
+
+        life.draw()
     }
 }
