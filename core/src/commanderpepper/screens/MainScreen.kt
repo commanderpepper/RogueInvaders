@@ -1,8 +1,9 @@
 package commanderpepper.screens
 
-import com.badlogic.gdx.ApplicationAdapter
+import com.badlogic.gdx.Game
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
+import com.badlogic.gdx.Screen
 import com.badlogic.gdx.graphics.GL20
 import commanderpepper.objects.*
 import commanderpepper.objects.enemyship.EnemyDirection
@@ -19,7 +20,7 @@ import commanderpepper.objects.player.fireball.createFireball
 import commanderpepper.objects.player.life.Life
 import commanderpepper.objects.player.score.Score
 
-class MainScreen : ApplicationAdapter() {
+class MainScreen(private val game: Game) : Screen {
 
     private var shipXCoordinate = XCoordinate(50f)
     private var shipYCoordinate = YCoordinate(50f)
@@ -60,28 +61,28 @@ class MainScreen : ApplicationAdapter() {
     private val lifeYCoordinate = YCoordinate(890f)
     private lateinit var life: Life
 
-    override fun create() {
+//    override fun create() {
+//
+//        score = Score(scoreXCoordinate, scoreYCoordinate)
+//
+//        life = Life(lifeXCoordinate, lifeYCoordinate)
+//
+//        enemyShipList = createEnemyShipMatrix(
+//                3,
+//                8,
+//                YCoordinate(20f),
+//                XCoordinate(45f),
+//                YCoordinate(45f)).map {
+//            it.toMutableList()
+//        }
+//        enemyShipController = EnemyShipController(
+//                XCoordinate(0f),
+//                XCoordinate(Gdx.graphics.width.toFloat()),
+//                speed
+//        )
+//    }
 
-        score = Score(scoreXCoordinate, scoreYCoordinate)
-
-        life = Life(lifeXCoordinate, lifeYCoordinate)
-
-        enemyShipList = createEnemyShipMatrix(
-                3,
-                8,
-                YCoordinate(20f),
-                XCoordinate(45f),
-                YCoordinate(45f)).map {
-            it.toMutableList()
-        }
-        enemyShipController = EnemyShipController(
-                XCoordinate(0f),
-                XCoordinate(Gdx.graphics.width.toFloat()),
-                speed
-        )
-    }
-
-    override fun render() {
+    override fun render(delta: Float) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
 
         val rightInput = Gdx.input.isKeyPressed(Input.Keys.RIGHT)
@@ -163,6 +164,11 @@ class MainScreen : ApplicationAdapter() {
             }
         }
 
+        if (life.isGameOver()) {
+//            playerShip.dispose()
+            game.screen = GameOverScreen(game)
+        }
+
         enemyShipList.flatten().forEach {
             it.draw()
         }
@@ -186,5 +192,41 @@ class MainScreen : ApplicationAdapter() {
         score.draw()
 
         life.draw()
+    }
+
+    override fun hide() {
+    }
+
+    override fun show() {
+        score = Score(scoreXCoordinate, scoreYCoordinate)
+
+        life = Life(lifeXCoordinate, lifeYCoordinate)
+
+        enemyShipList = createEnemyShipMatrix(
+                3,
+                8,
+                YCoordinate(20f),
+                XCoordinate(45f),
+                YCoordinate(45f)).map {
+            it.toMutableList()
+        }
+        enemyShipController = EnemyShipController(
+                XCoordinate(0f),
+                XCoordinate(Gdx.graphics.width.toFloat()),
+                speed
+        )
+    }
+
+    override fun pause() {
+    }
+
+    override fun resume() {
+    }
+
+    override fun resize(width: Int, height: Int) {
+    }
+
+    override fun dispose() {
+        score.dispose()
     }
 }

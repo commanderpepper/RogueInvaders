@@ -28,6 +28,10 @@ class Life(private val xCoordinate: XCoordinate,
         return amount < 0
     }
 
+    fun dispose(){
+        spriteBatch.dispose()
+    }
+
     companion object {
         private val font = BitmapFont()
         private val spriteBatch = SpriteBatch()

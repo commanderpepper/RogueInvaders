@@ -20,6 +20,10 @@ class Score(private val xCoordinate: XCoordinate,
         spriteBatch.end()
     }
 
+    fun dispose(){
+        spriteBatch.dispose()
+    }
+
     companion object {
         private val font = BitmapFont()
         private val spriteBatch = SpriteBatch()

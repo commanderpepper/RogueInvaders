@@ -49,6 +49,10 @@ class EnemyShip(
         return fireball.checkForEnemyCollision(point, height, width)
     }
 
+    fun dispose() {
+        shapeRenderer.dispose()
+    }
+
     private fun getFireballXOrigin(fireballWidth: Width): XCoordinate {
         return XCoordinate(point.xCoordinate.value +
                 ((width.measurement / 2) - (fireballWidth.measurement / 2)))

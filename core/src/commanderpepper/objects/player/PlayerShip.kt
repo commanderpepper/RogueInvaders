@@ -42,6 +42,10 @@ class PlayerShip(
         return fireball.checkForCollision(this.point, this.height, this.width)
     }
 
+    fun dispose() {
+        shapeRenderer.dispose()
+    }
+
     companion object {
         private val shapeRenderer = ShapeRenderer()
     }

@@ -3,6 +3,7 @@ package commanderpepper.spaceinvaders.desktop
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration
 import commanderpepper.screens.MainScreen
+import commanderpepper.screens.TitleScreen
 
 object DesktopLauncher {
     @JvmStatic
@@ -12,6 +13,7 @@ object DesktopLauncher {
             height = 900
             width = 500
         }
-        LwjglApplication(MainScreen(), config)
+//        LwjglApplication(MainScreen(), config)
+        LwjglApplication(TitleScreen(), config)
     }
 }
