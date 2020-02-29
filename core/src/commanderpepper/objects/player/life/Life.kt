@@ -25,7 +25,7 @@ class Life(private val xCoordinate: XCoordinate,
     }
 
     fun isGameOver(): Boolean {
-        return amount < 0
+        return amount <= 0
     }
 
     fun dispose(){

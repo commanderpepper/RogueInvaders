@@ -21,6 +21,7 @@ class Score(private val xCoordinate: XCoordinate,
     }
 
     fun dispose(){
+        font.dispose()
         spriteBatch.dispose()
     }
 

@@ -53,10 +53,6 @@ class Fireball(
         return rectOverlaps(fireballRect, otherRect)
     }
 
-    fun dispose() {
-        shapeRenderer.dispose()
-    }
-
     /**
      * @return whether this rectangle overlaps the other rectangle.
      */
@@ -66,6 +62,10 @@ class Fireball(
 
     companion object {
         private val shapeRenderer = ShapeRenderer()
+
+        fun dispose() {
+            shapeRenderer.dispose()
+        }
     }
 }
 

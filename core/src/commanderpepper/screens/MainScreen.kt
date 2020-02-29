@@ -17,8 +17,12 @@ import commanderpepper.objects.player.checkPlayerShipDirection
 import commanderpepper.objects.player.fireball.Fireball
 import commanderpepper.objects.player.fireball.FireballBar
 import commanderpepper.objects.player.fireball.createFireball
+import commanderpepper.objects.player.life.InvulnerabilityTime
 import commanderpepper.objects.player.life.Life
 import commanderpepper.objects.player.score.Score
+import java.time.Duration
+import java.time.OffsetTime
+import java.util.*
 
 class MainScreen(private val game: Game) : Screen {
 
@@ -45,6 +49,8 @@ class MainScreen(private val game: Game) : Screen {
     private var fireballBarLevel: Int = 0
 
     private var fireballList = mutableListOf<Fireball>()
+    private val fireballChance = 4000000
+//    private val fireballChance = 1000000
 
     private lateinit var enemyShipList: List<MutableList<EnemyShip>>
 
@@ -60,6 +66,8 @@ class MainScreen(private val game: Game) : Screen {
     private val lifeXCoordinate = XCoordinate(50f)
     private val lifeYCoordinate = YCoordinate(890f)
     private lateinit var life: Life
+
+    private var invulnerabilityTime = InvulnerabilityTime(Date(Long.MAX_VALUE))
 
 //    override fun create() {
 //
@@ -130,7 +138,7 @@ class MainScreen(private val game: Game) : Screen {
 
         enemyFireballList.addAll(
                 enemyShipController.createFireballsFromEnemyShips(
-                        enemyFireballWidth, enemyFireballHeight, 4000000, enemyShipList
+                        enemyFireballWidth, enemyFireballHeight, fireballChance, enemyShipList
                 )
         )
 
@@ -160,14 +168,19 @@ class MainScreen(private val game: Game) : Screen {
             if (playerShip.checkForFireballCollision(enemyFireballList[i])) {
                 enemyFireballList.removeAt(i)
                 life = life.removeLife()
+                invulnerabilityTime = InvulnerabilityTime(Date(System.currentTimeMillis()))
+
                 break
             }
         }
 
-        if (life.isGameOver()) {
+        println(invulnerabilityTime.isInvulnerable())
+
+//        if (life.isGameOver()) {
 //            playerShip.dispose()
-            game.screen = GameOverScreen(game)
-        }
+//            this.dispose()
+//            game.screen = GameOverScreen(game)
+//        }
 
         enemyShipList.flatten().forEach {
             it.draw()
@@ -195,6 +208,8 @@ class MainScreen(private val game: Game) : Screen {
     }
 
     override fun hide() {
+        score.dispose()
+        Fireball.dispose()
     }
 
     override fun show() {
@@ -227,6 +242,7 @@ class MainScreen(private val game: Game) : Screen {
     }
 
     override fun dispose() {
-        score.dispose()
+//        score.dispose()
+
     }
 }
