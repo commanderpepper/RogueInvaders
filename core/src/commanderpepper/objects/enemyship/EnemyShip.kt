@@ -8,7 +8,8 @@ import commanderpepper.objects.*
 import commanderpepper.objects.baseshapes.Rectangle
 import commanderpepper.objects.player.fireball.Fireball
 
-class EnemyShip(
+data class EnemyShip(
+        private val id: Int,
         private val point: Point,
         private val height: Height,
         private val width: Width
@@ -25,16 +26,12 @@ class EnemyShip(
         }
     }
 
-    fun moveShip(point: Point): EnemyShip {
-        return EnemyShip(point, this.height, this.width)
-    }
-
     fun moveShip(yCoordinate: YCoordinate): EnemyShip {
-        return EnemyShip(Point(this.point.xCoordinate, this.point.yCoordinate + yCoordinate), this.height, this.width)
+        return EnemyShip(this.id, Point(this.point.xCoordinate, this.point.yCoordinate + yCoordinate), this.height, this.width)
     }
 
     fun moveShip(xCoordinate: XCoordinate): EnemyShip {
-        return EnemyShip(Point(this.point.xCoordinate + xCoordinate, this.point.yCoordinate), this.height, this.width)
+        return EnemyShip(this.id, Point(this.point.xCoordinate + xCoordinate, this.point.yCoordinate), this.height, this.width)
     }
 
     fun checkIfEnemyShipIsTooLeft(): Boolean {
@@ -71,6 +68,34 @@ class EnemyShip(
     }
 }
 
+fun createEnemyShipMap(rowSize: Int, columnSize: Int, verticalSpace: YCoordinate, sideMargin: XCoordinate, topMargin: YCoordinate,
+                       shipHeight: Height = Height(12f), shipWidth: Width = Width(14f)): MutableMap<Int, EnemyShip> {
+    val enemyShipMap : MutableMap<Int, EnemyShip> = mutableMapOf()
+
+    val leftMostXCoordinate = sideMargin.copy()
+    val rightMostXCoordinate = XCoordinate(Gdx.graphics.width - sideMargin.value)
+
+    val verticalSpaceInBetween = XCoordinate((rightMostXCoordinate.value - leftMostXCoordinate.value) / columnSize)
+
+    val startingYCoordinate = YCoordinate(Gdx.graphics.height.toFloat()) - topMargin
+    var shipPoint = Point(leftMostXCoordinate, startingYCoordinate)
+
+    var id = 0
+
+    for(row in 0 until rowSize){
+        for (column in 0 until columnSize){
+            val enemyShip = EnemyShip(id, shipPoint, shipHeight, shipWidth)
+            enemyShipMap[id] = enemyShip
+            id++
+            shipPoint = shipPoint.increaseXCoordiante(verticalSpaceInBetween)
+        }
+        shipPoint = shipPoint.decreaseYCoordiante(verticalSpace)
+        shipPoint = Point(leftMostXCoordinate, shipPoint.yCoordinate)
+    }
+
+    return enemyShipMap
+}
+
 fun createEnemyShipMatrix(rowSize: Int,
                           columnSize: Int,
                           verticalSpace: YCoordinate,
@@ -88,10 +113,13 @@ fun createEnemyShipMatrix(rowSize: Int,
     val startingYCoordinate = YCoordinate(Gdx.graphics.height.toFloat()) - topMargin
     var shipPoint = Point(leftMostXCoordinate, startingYCoordinate)
 
+    var id = 0
+
     for (row in 0 until rowSize) {
         shipMatrix.add(mutableListOf())
         for (column in 0 until columnSize) {
-            val enemyShip = EnemyShip(shipPoint, shipHeight, shipWidth)
+            val enemyShip = EnemyShip(id, shipPoint, shipHeight, shipWidth)
+            id++
             shipMatrix[row].add(enemyShip)
             shipPoint = shipPoint.increaseXCoordiante(verticalSpaceInBetween)
         }

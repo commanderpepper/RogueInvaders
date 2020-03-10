@@ -9,6 +9,8 @@ class EnemyShipController(
         private val rightMargin: XCoordinate,
         private val speed: Float) {
 
+    private val enemyShipMap: MutableMap<Int, EnemyShip> = mutableMapOf()
+
     private fun calculateDownwardMovement(): YCoordinate {
         return YCoordinate(speed * -1)
     }
@@ -53,6 +55,35 @@ class EnemyShipController(
         return enemyDirection
     }
 
+    fun checkNextDirection(enemyDirection: EnemyDirection, enemyShipMap: Map<Int, EnemyShip>): EnemyDirection {
+        val ships = enemyShipMap.values
+
+        val isTooLeft = ships.map {
+            it.moveShip(XCoordinate(speed * -1))
+        }.any {
+            it.checkIfEnemyShipIsTooLeft()
+        }
+
+        val isTooRight = ships.map {
+            it.moveShip(XCoordinate(speed))
+        }.any {
+            it.checkIfEnemyShipIsTooRight()
+        }
+
+        if (isTooLeft && enemyDirection == EnemyDirection.DOWN) {
+            return EnemyDirection.RIGHT
+        }
+
+        if (isTooRight && enemyDirection == EnemyDirection.DOWN) {
+            return EnemyDirection.LEFT
+        }
+
+        if (isTooLeft || isTooRight) {
+            return EnemyDirection.DOWN
+        }
+
+        return enemyDirection
+    }
 
     fun moveEnemyShips(enemyDirection: EnemyDirection, enemyShipMatrix: List<List<EnemyShip>>): List<List<EnemyShip>> {
         return when (enemyDirection) {
@@ -60,6 +91,20 @@ class EnemyShipController(
             EnemyDirection.LEFT -> animateEnemyShipsHorizontally(enemyShipMatrix, calculateLeftMovement())
             EnemyDirection.DOWN -> animateEnemyShipsVertically(enemyShipMatrix, calculateDownwardMovement())
             else -> enemyShipMatrix
+        }
+    }
+
+    fun moveEnemyShips(enemyDirection: EnemyDirection, enemyShipMap: MutableMap<Int, EnemyShip>) {
+        when (enemyDirection) {
+            EnemyDirection.RIGHT -> {
+                moveShipsHorizontally(enemyShipMap, calculateRightMovement())
+            }
+            EnemyDirection.LEFT -> {
+                moveShipsHorizontally(enemyShipMap, calculateLeftMovement())
+            }
+            EnemyDirection.DOWN -> {
+                moveShipsVertically(enemyShipMap, calculateDownwardMovement())
+            }
         }
     }
 
@@ -100,6 +145,33 @@ class EnemyShipController(
         return fireBallList
     }
 
+    fun createFireballsFromEnemyShips(fireballWidth: Width, fireballHeight: Height, randomChance: Int, enemyShipMap: Map<Int, EnemyShip>): List<Fireball> {
+        val enemyShips = enemyShipMap.values
+        val fireBallList = mutableListOf<Fireball>()
+
+        enemyShips.forEach {
+            val enemyNumber = Random.nextInt(0, Int.MAX_VALUE)
+            val intMax = Int.MAX_VALUE
+            val result = intMax - enemyNumber
+            if (result <= randomChance) {
+                fireBallList.add(Fireball(0, it.getFireballPointOrigin(fireballWidth), fireballHeight, fireballWidth))
+            }
+        }
+
+        return fireBallList
+    }
+
+    fun moveShipsHorizontally(enemyShipMap: MutableMap<Int, EnemyShip>, xCoordinate: XCoordinate) {
+        enemyShipMap.keys.forEach {
+            enemyShipMap[it] = enemyShipMap[it]!!.moveShip(xCoordinate)
+        }
+    }
+
+    fun moveShipsVertically(enemyShipMap: MutableMap<Int, EnemyShip>, yCoordinate: YCoordinate) {
+        enemyShipMap.keys.forEach {
+            enemyShipMap[it] = enemyShipMap[it]!!.moveShip(yCoordinate)
+        }
+    }
 
     companion object {
 
@@ -119,6 +191,12 @@ class EnemyShipController(
             }
         }
     }
+}
+
+sealed class Movement() {
+    object Horizontally : Movement()
+    object Vertically : Movement()
+    object Circular : Movement()
 }
 
 enum class EnemyDirection() {

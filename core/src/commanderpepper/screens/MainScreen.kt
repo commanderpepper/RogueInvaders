@@ -6,10 +6,7 @@ import com.badlogic.gdx.Input
 import com.badlogic.gdx.Screen
 import com.badlogic.gdx.graphics.GL20
 import commanderpepper.objects.*
-import commanderpepper.objects.enemyship.EnemyDirection
-import commanderpepper.objects.enemyship.EnemyShip
-import commanderpepper.objects.enemyship.EnemyShipController
-import commanderpepper.objects.enemyship.createEnemyShipMatrix
+import commanderpepper.objects.enemyship.*
 import commanderpepper.objects.player.PlayerShip
 import commanderpepper.objects.player.calculateShipPositionWhenTooLeft
 import commanderpepper.objects.player.calculateShipPositionWhenTooRight
@@ -52,7 +49,7 @@ class MainScreen(private val game: Game) : Screen {
     private val fireballChance = 4000000
 //    private val fireballChance = 1000000
 
-    private lateinit var enemyShipList: List<MutableList<EnemyShip>>
+    private var enemyShipMap = mutableMapOf<Int, EnemyShip>()
 
     private var speed: Float = .0001f
     private lateinit var enemyShipController: EnemyShipController
@@ -68,27 +65,6 @@ class MainScreen(private val game: Game) : Screen {
     private lateinit var life: Life
 
     private var invulnerabilityTime = InvulnerabilityTime(Date(Long.MAX_VALUE))
-
-//    override fun create() {
-//
-//        score = Score(scoreXCoordinate, scoreYCoordinate)
-//
-//        life = Life(lifeXCoordinate, lifeYCoordinate)
-//
-//        enemyShipList = createEnemyShipMatrix(
-//                3,
-//                8,
-//                YCoordinate(20f),
-//                XCoordinate(45f),
-//                YCoordinate(45f)).map {
-//            it.toMutableList()
-//        }
-//        enemyShipController = EnemyShipController(
-//                XCoordinate(0f),
-//                XCoordinate(Gdx.graphics.width.toFloat()),
-//                speed
-//        )
-//    }
 
     override fun render(delta: Float) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
@@ -138,13 +114,13 @@ class MainScreen(private val game: Game) : Screen {
 
         enemyFireballList.addAll(
                 enemyShipController.createFireballsFromEnemyShips(
-                        enemyFireballWidth, enemyFireballHeight, fireballChance, enemyShipList
+                        enemyFireballWidth, enemyFireballHeight, fireballChance, enemyShipMap
                 )
         )
 
-        enemyDirection = enemyShipController.checkNextDirection(enemyDirection, enemyShipList)
+        enemyDirection = enemyShipController.checkNextDirection(enemyDirection, enemyShipMap)
 
-        enemyShipList = enemyShipController.moveEnemyShips(enemyDirection, enemyShipList).map { it.toMutableList() }
+        enemyShipController.moveEnemyShips(enemyDirection, enemyShipMap)
 
         speed += .0001f
 
@@ -154,27 +130,27 @@ class MainScreen(private val game: Game) : Screen {
                 speed
         )
 
-        enemyShipList.forEachIndexed { rowIndex, shipRow ->
-            shipRow.zip(fireballList).forEachIndexed { columnIndex, pair ->
-                if (pair.first.checkForFireballCollision(pair.second)) {
-                    enemyShipList[rowIndex].removeAt(columnIndex)
-                    fireballList.remove(pair.second)
-                    score = score.increaseScore(3.0)
-                }
+        enemyShipMap.entries.zip(fireballList).forEach {
+            val id = it.first.key
+            val enemyShip = it.first.value
+            val fireball = it.second
+            if(enemyShip.checkForFireballCollision(fireball)){
+                enemyShipMap.remove(id)
+                fireballList.remove(fireball)
+                score = score.increaseScore(3.0)
             }
         }
 
         for (i in 0 until enemyFireballList.size) {
-            if (playerShip.checkForFireballCollision(enemyFireballList[i])) {
-                enemyFireballList.removeAt(i)
-                life = life.removeLife()
-                invulnerabilityTime = InvulnerabilityTime(Date(System.currentTimeMillis()))
-
-                break
+            if (!invulnerabilityTime.isInvulnerable()) {
+                if (playerShip.checkForFireballCollision(enemyFireballList[i])) {
+                    enemyFireballList.removeAt(i)
+                    life = life.removeLife()
+                    invulnerabilityTime = InvulnerabilityTime(Date(System.currentTimeMillis()))
+                    break
+                }
             }
         }
-
-        println(invulnerabilityTime.isInvulnerable())
 
 //        if (life.isGameOver()) {
 //            playerShip.dispose()
@@ -182,7 +158,7 @@ class MainScreen(private val game: Game) : Screen {
 //            game.screen = GameOverScreen(game)
 //        }
 
-        enemyShipList.flatten().forEach {
+        enemyShipMap.values.forEach {
             it.draw()
         }
 
@@ -217,14 +193,10 @@ class MainScreen(private val game: Game) : Screen {
 
         life = Life(lifeXCoordinate, lifeYCoordinate)
 
-        enemyShipList = createEnemyShipMatrix(
-                3,
-                8,
-                YCoordinate(20f),
-                XCoordinate(45f),
-                YCoordinate(45f)).map {
-            it.toMutableList()
-        }
+        enemyShipMap = createEnemyShipMap(
+                3, 8, YCoordinate(20f), XCoordinate(45f), YCoordinate(45f)
+        )
+
         enemyShipController = EnemyShipController(
                 XCoordinate(0f),
                 XCoordinate(Gdx.graphics.width.toFloat()),
