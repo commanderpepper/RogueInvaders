@@ -14,6 +14,7 @@ import commanderpepper.objects.player.checkPlayerShipDirection
 import commanderpepper.objects.player.fireball.Fireball
 import commanderpepper.objects.player.fireball.FireballBar
 import commanderpepper.objects.player.fireball.createFireball
+import commanderpepper.objects.player.fireball.off
 import commanderpepper.objects.player.life.InvulnerabilityTime
 import commanderpepper.objects.player.life.Life
 import commanderpepper.objects.player.score.Score
@@ -101,7 +102,7 @@ class MainScreen(private val game: Game) : Screen {
                 Point(fireballBarXCoordinate, fireballBarYCoordinate), Height(15f))
         fireballBar.draw()
 
-        if (shoopInput) {
+        if (shoopInput && fireballBarLevel !in off) {
             fireballPoint = playerShip.getFireballPointOrigin(fireballWidth)
             val fireball = createFireball(fireballBarLevel, fireballPoint, fireballHeight, fireballWidth)
             fireballList.add(fireball)
@@ -130,14 +131,19 @@ class MainScreen(private val game: Game) : Screen {
                 speed
         )
 
-        enemyShipMap.entries.zip(fireballList).forEach {
-            val id = it.first.key
-            val enemyShip = it.first.value
-            val fireball = it.second
-            if(enemyShip.checkForFireballCollision(fireball)){
-                enemyShipMap.remove(id)
-                fireballList.remove(fireball)
-                score = score.increaseScore(3.0)
+        val listOfEntries = enemyShipMap.entries.toList()
+
+        for (i in enemyShipMap.keys.indices) {
+            val id = listOfEntries[i].key
+            val enemyShip = listOfEntries[i].value
+            check@ for (j in fireballList.indices) {
+                val checkForFireballCollision = enemyShip.checkForFireballCollision(fireballList[j])
+                if (checkForFireballCollision) {
+                    enemyShipMap.remove(id)
+                    fireballList.removeAt(j)
+                    score = score.increaseScore(3.0)
+                    break@check
+                }
             }
         }
 
@@ -151,12 +157,6 @@ class MainScreen(private val game: Game) : Screen {
                 }
             }
         }
-
-//        if (life.isGameOver()) {
-//            playerShip.dispose()
-//            this.dispose()
-//            game.screen = GameOverScreen(game)
-//        }
 
         enemyShipMap.values.forEach {
             it.draw()

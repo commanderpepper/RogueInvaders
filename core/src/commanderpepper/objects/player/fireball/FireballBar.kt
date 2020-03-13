@@ -31,20 +31,37 @@ class FireballBar private constructor(
         private val shapeRenderer = ShapeRenderer()
 
         fun createFireballBar(level: Int, point: Point, height: Height): FireballBar {
-            return FireballBar((::determineFireballBarColor)(level), point, height, (::determineFireballBarWidth)(level))
+            return FireballBar(determineFireballBarColor(level), point, height, determineFireballBarWidth(level))
+        }
+
+        fun createFireballBar(level: PlayerFireballLevel, point: Point, height: Height, width: Width): FireballBar {
+            return FireballBar(determineFireballBarColor(level), point, height, width)
         }
     }
 }
 
-private val low = 0..60
-private val medium = 61..120
-private val limit: Float = (Gdx.graphics.width / 2).toFloat()
+val off = 0..35
+private val low = 35..59
+private val medium = 60..96
+
+//private val limit: Float = (Gdx.graphics.width / 2).toFloat()
+private val limit: Float = 97f
 
 fun determineFireballBarColor(level: Int): Color {
     return when (level) {
+        in off -> Color.GRAY
         in low -> Color.YELLOW
         in medium -> Color.ORANGE
         else -> Color.RED
+    }
+}
+
+fun determineFireballBarColor(playerFireballLevel: PlayerFireballLevel): Color {
+    return when (playerFireballLevel) {
+        is PlayerFireballLevel.Off -> PlayerFireballLevel.Off().color
+        is PlayerFireballLevel.Low -> PlayerFireballLevel.Low().color
+        is PlayerFireballLevel.Medium -> PlayerFireballLevel.Medium().color
+        else -> PlayerFireballLevel.High().color
     }
 }
 
@@ -56,4 +73,5 @@ fun determineFireballBarWidth(level: Int): Width {
         else -> Width(level.toFloat())
     }
 }
+
 
