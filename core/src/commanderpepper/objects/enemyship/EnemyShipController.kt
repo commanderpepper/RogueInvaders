@@ -1,6 +1,7 @@
 package commanderpepper.objects.enemyship
 
 import commanderpepper.objects.*
+import commanderpepper.objects.player.fireball.EnemyFireballLevel
 import commanderpepper.objects.player.fireball.Fireball
 import kotlin.random.Random
 
@@ -138,7 +139,7 @@ class EnemyShipController(
             val intMax = Int.MAX_VALUE
             val result = intMax - enemyNumber
             if (result <= randomChance) {
-                fireBallList.add(Fireball(0, it.getFireballPointOrigin(fireballWidth), fireballHeight, fireballWidth))
+                fireBallList.add(Fireball(EnemyFireballLevel.Default(), it.getFireballPointOrigin(fireballWidth), fireballHeight, fireballWidth))
             }
         }
 
@@ -154,7 +155,7 @@ class EnemyShipController(
             val intMax = Int.MAX_VALUE
             val result = intMax - enemyNumber
             if (result <= randomChance) {
-                fireBallList.add(Fireball(0, it.getFireballPointOrigin(fireballWidth), fireballHeight, fireballWidth))
+                fireBallList.add(Fireball(EnemyFireballLevel.Default(), it.getFireballPointOrigin(fireballWidth), fireballHeight, fireballWidth))
             }
         }
 

@@ -3,13 +3,13 @@ package commanderpepper.objects.player.fireball
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
-import com.badlogic.gdx.math.Intersector
 import commanderpepper.interfaces.Drawable
 import commanderpepper.objects.*
 import commanderpepper.objects.baseshapes.Rectangle
 
 class Fireball(
-        private val level: Int = 0,
+//        private val level: Int = 0,
+        private val fireballProperty: FireballProperty,
         private val point: Point,
         private val height: Height,
         private val width: Width
@@ -32,11 +32,23 @@ class Fireball(
     }
 
     fun createFireBall(fireballSpeed: YCoordinate): Fireball {
-        return Fireball(level, point.increaseYCoordiante(fireballSpeed), height, width)
+        return Fireball(fireballProperty, point.increaseYCoordiante(fireballSpeed), height, width)
     }
 
     private fun determineColor(): Color {
-        return determineFireballBarColor(level)
+        return determineFireballBarColor(fireballProperty)
+    }
+
+    private fun determineFireballBarColor(fireballProperty: FireballProperty): Color {
+        return when (fireballProperty) {
+            is PlayerFireballLevel -> when (fireballProperty) {
+                is PlayerFireballLevel.Off -> PlayerFireballLevel.Off().color
+                is PlayerFireballLevel.Low -> PlayerFireballLevel.Low().color
+                is PlayerFireballLevel.Medium -> PlayerFireballLevel.Medium().color
+                else -> PlayerFireballLevel.High().color
+            }
+            else -> EnemyFireballLevel.Default().color
+        }
     }
 
     fun checkForEnemyCollision(enemyPoint: Point, enemyHeight: Height, enemyWidth: Width): Boolean {
@@ -69,22 +81,39 @@ class Fireball(
     }
 }
 
-fun createFireball(fireBallLevel: Int, fireBallPoint: Point, fireBallHeight: Height, fireBallWidth: Width): Fireball {
-    return when {
-        fireBallLevel in 61..120 -> {
-            val nFireBallHeight = Height(fireBallHeight.measurement * 2f)
-            Fireball(fireBallLevel, fireBallPoint, nFireBallHeight, fireBallWidth)
+fun createPlayerFireball(fireBallLevel: Int, fireBallPoint: Point, fireBallHeight: Height, fireBallWidth: Width): Fireball {
+    return when (fireBallLevel) {
+        in PlayerFireballLevel.Low().range -> {
+            Fireball(PlayerFireballLevel.Low(), fireBallPoint, fireBallHeight, fireBallWidth)
         }
-        fireBallLevel > 121
-        -> {
-            val nFireBallHeight = Height(fireBallHeight.measurement * 3f)
-            Fireball(fireBallLevel, fireBallPoint, nFireBallHeight, fireBallWidth)
+        in PlayerFireballLevel.Medium().range -> {
+            val nFireballHeight = Height(fireBallHeight.measurement * 2f)
+            Fireball(PlayerFireballLevel.Medium(), fireBallPoint, nFireballHeight, fireBallWidth)
         }
-        else -> {
-            Fireball(fireBallLevel, fireBallPoint, fireBallHeight, fireBallWidth)
+        in PlayerFireballLevel.High().range -> {
+            val nFireballHeight = Height(fireBallHeight.measurement * 3f)
+            Fireball(PlayerFireballLevel.High(), fireBallPoint, nFireballHeight, fireBallWidth)
         }
+        else -> Fireball(PlayerFireballLevel.Off(), fireBallPoint, fireBallHeight, fireBallWidth)
     }
 }
+
+//fun createFireball(fireballProperty: FireballProperty, fireBallPoint: Point, fireBallHeight: Height, fireBallWidth: Width): Fireball {
+//    return when {
+//        fireBallLevel in 61..120 -> {
+//            val nFireBallHeight = Height(fireBallHeight.measurement * 2f)
+//            Fireball(fireBallLevel, fireBallPoint, nFireBallHeight, fireBallWidth)
+//        }
+//        fireBallLevel > 121
+//        -> {
+//            val nFireBallHeight = Height(fireBallHeight.measurement * 3f)
+//            Fireball(fireBallLevel, fireBallPoint, nFireBallHeight, fireBallWidth)
+//        }
+//        else -> {
+//            Fireball(fireBallLevel, fireBallPoint, fireBallHeight, fireBallWidth)
+//        }
+//    }
+//}
 
 class FireballLevel(value: Int = 1) {
 

@@ -11,10 +11,7 @@ import commanderpepper.objects.player.PlayerShip
 import commanderpepper.objects.player.calculateShipPositionWhenTooLeft
 import commanderpepper.objects.player.calculateShipPositionWhenTooRight
 import commanderpepper.objects.player.checkPlayerShipDirection
-import commanderpepper.objects.player.fireball.Fireball
-import commanderpepper.objects.player.fireball.FireballBar
-import commanderpepper.objects.player.fireball.createFireball
-import commanderpepper.objects.player.fireball.off
+import commanderpepper.objects.player.fireball.*
 import commanderpepper.objects.player.life.InvulnerabilityTime
 import commanderpepper.objects.player.life.Life
 import commanderpepper.objects.player.score.Score
@@ -104,7 +101,7 @@ class MainScreen(private val game: Game) : Screen {
 
         if (shoopInput && fireballBarLevel !in off) {
             fireballPoint = playerShip.getFireballPointOrigin(fireballWidth)
-            val fireball = createFireball(fireballBarLevel, fireballPoint, fireballHeight, fireballWidth)
+            val fireball = createPlayerFireball(fireballBarLevel, fireballPoint, fireballHeight, fireballWidth)
             fireballList.add(fireball)
             fireballBarLevel = 0
         }
