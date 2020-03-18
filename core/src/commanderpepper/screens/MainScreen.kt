@@ -15,8 +15,6 @@ import commanderpepper.objects.player.fireball.*
 import commanderpepper.objects.player.life.InvulnerabilityTime
 import commanderpepper.objects.player.life.Life
 import commanderpepper.objects.player.score.Score
-import java.time.Duration
-import java.time.OffsetTime
 import java.util.*
 
 class MainScreen(private val game: Game) : Screen {
@@ -43,7 +41,7 @@ class MainScreen(private val game: Game) : Screen {
 
     private var fireballBarLevel: Int = 0
 
-    private var fireballList = mutableListOf<Fireball>()
+    private var playerFireballs = mutableListOf<Fireball>()
     private val fireballChance = 4000000
 //    private val fireballChance = 1000000
 
@@ -99,14 +97,14 @@ class MainScreen(private val game: Game) : Screen {
                 Point(fireballBarXCoordinate, fireballBarYCoordinate), Height(15f))
         fireballBar.draw()
 
-        if (shoopInput && fireballBarLevel !in off) {
+        if (shoopInput && fireballBarLevel !in PlayerFireballLevel.Off().range) {
             fireballPoint = playerShip.getFireballPointOrigin(fireballWidth)
             val fireball = createPlayerFireball(fireballBarLevel, fireballPoint, fireballHeight, fireballWidth)
-            fireballList.add(fireball)
+            playerFireballs.add(fireball)
             fireballBarLevel = 0
         }
 
-        fireballList.removeAll { fireball ->
+        playerFireballs.removeAll { fireball ->
             fireball.checkIfFireballYCoordinateIsTooHigh()
         }
 
@@ -133,11 +131,17 @@ class MainScreen(private val game: Game) : Screen {
         for (i in enemyShipMap.keys.indices) {
             val id = listOfEntries[i].key
             val enemyShip = listOfEntries[i].value
-            check@ for (j in fireballList.indices) {
-                val checkForFireballCollision = enemyShip.checkForFireballCollision(fireballList[j])
+            check@ for (j in playerFireballs.indices) {
+                val checkForFireballCollision = enemyShip.checkForFireballCollision(playerFireballs[j])
                 if (checkForFireballCollision) {
                     enemyShipMap.remove(id)
-                    fireballList.removeAt(j)
+                    val fireball = playerFireballs[j]
+                    if (fireball.isGreaterThanOne()) {
+                        var fireballD = playerFireballs[j]
+                        fireballD = fireballD.decrementFireball()
+                        playerFireballs.add(fireballD)
+                    }
+                    playerFireballs.removeAt(j)
                     score = score.increaseScore(3.0)
                     break@check
                 }
@@ -159,7 +163,7 @@ class MainScreen(private val game: Game) : Screen {
             it.draw()
         }
 
-        fireballList.forEach { fireball ->
+        playerFireballs.forEach { fireball ->
             fireball.draw()
         }
 
@@ -167,7 +171,7 @@ class MainScreen(private val game: Game) : Screen {
             it.draw()
         }
 
-        fireballList = fireballList.map { fireball ->
+        playerFireballs = playerFireballs.map { fireball ->
             fireball.createFireBall(fireballYSpeed)
         }.toMutableList()
 
@@ -191,7 +195,7 @@ class MainScreen(private val game: Game) : Screen {
         life = Life(lifeXCoordinate, lifeYCoordinate)
 
         enemyShipMap = createEnemyShipMap(
-                3, 8, YCoordinate(20f), XCoordinate(45f), YCoordinate(45f)
+                5, 8, YCoordinate(20f), XCoordinate(45f), YCoordinate(45f)
         )
 
         enemyShipController = EnemyShipController(

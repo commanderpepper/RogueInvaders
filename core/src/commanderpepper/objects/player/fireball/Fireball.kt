@@ -8,7 +8,6 @@ import commanderpepper.objects.*
 import commanderpepper.objects.baseshapes.Rectangle
 
 class Fireball(
-//        private val level: Int = 0,
         private val fireballProperty: FireballProperty,
         private val point: Point,
         private val height: Height,
@@ -33,6 +32,10 @@ class Fireball(
 
     fun createFireBall(fireballSpeed: YCoordinate): Fireball {
         return Fireball(fireballProperty, point.increaseYCoordiante(fireballSpeed), height, width)
+    }
+
+    fun decrementFireball(): Fireball {
+        return Fireball(fireballProperty.lower(), point, getSmallerHeight(), width)
     }
 
     private fun determineColor(): Color {
@@ -65,11 +68,23 @@ class Fireball(
         return rectOverlaps(fireballRect, otherRect)
     }
 
+    fun isGreaterThanOne(): Boolean {
+        return !(this.fireballProperty == PlayerFireballLevel.Low() || this.fireballProperty == PlayerFireballLevel.Off())
+    }
+
     /**
      * @return whether this rectangle overlaps the other rectangle.
      */
     private fun rectOverlaps(r1: com.badlogic.gdx.math.Rectangle, r2: com.badlogic.gdx.math.Rectangle): Boolean {
         return r1.x < r2.x + r2.width && r1.x + r1.width > r2.x && r1.y < r2.y + r2.height && r1.y + r1.height > r2.y
+    }
+
+    private fun getSmallerHeight(): Height {
+        return if (fireballProperty == PlayerFireballLevel.High()) {
+            Height(height.measurement / 2f)
+        } else {
+            Height(height.measurement)
+        }
     }
 
     companion object {
@@ -94,7 +109,14 @@ fun createPlayerFireball(fireBallLevel: Int, fireBallPoint: Point, fireBallHeigh
             val nFireballHeight = Height(fireBallHeight.measurement * 3f)
             Fireball(PlayerFireballLevel.High(), fireBallPoint, nFireballHeight, fireBallWidth)
         }
-        else -> Fireball(PlayerFireballLevel.Off(), fireBallPoint, fireBallHeight, fireBallWidth)
+        else -> {
+            if (fireBallLevel in PlayerFireballLevel.Off().range) {
+                Fireball(PlayerFireballLevel.Off(), fireBallPoint, fireBallHeight, fireBallWidth)
+            } else {
+                val nFireballHeight = Height(fireBallHeight.measurement * 3f)
+                Fireball(PlayerFireballLevel.High(), fireBallPoint, nFireballHeight, fireBallWidth)
+            }
+        }
     }
 }
 

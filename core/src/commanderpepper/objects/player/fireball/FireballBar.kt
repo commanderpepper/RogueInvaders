@@ -1,13 +1,11 @@
 package commanderpepper.objects.player.fireball
 
-import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import commanderpepper.interfaces.Drawable
 import commanderpepper.objects.Height
 import commanderpepper.objects.Point
 import commanderpepper.objects.Width
-import commanderpepper.objects.YCoordinate
 import commanderpepper.objects.baseshapes.Rectangle
 
 class FireballBar private constructor(
@@ -40,19 +38,14 @@ class FireballBar private constructor(
     }
 }
 
-val off = 0..35
-private val low = 35..59
-private val medium = 60..96
-
-//private val limit: Float = (Gdx.graphics.width / 2).toFloat()
-private val limit: Float = 97f
+private val limit: Float = 91f
 
 fun determineFireballBarColor(level: Int): Color {
     return when (level) {
-        in off -> Color.GRAY
-        in low -> Color.YELLOW
-        in medium -> Color.ORANGE
-        else -> Color.RED
+        in PlayerFireballLevel.Off().range -> PlayerFireballLevel.Off().color
+        in PlayerFireballLevel.Low().range -> PlayerFireballLevel.Low().color
+        in PlayerFireballLevel.Medium().range -> PlayerFireballLevel.Medium().color
+        else -> PlayerFireballLevel.High().color
     }
 }
 
