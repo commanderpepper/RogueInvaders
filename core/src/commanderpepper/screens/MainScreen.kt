@@ -67,7 +67,7 @@ class MainScreen(private val game: Game) : Screen {
 
         val rightInput = Gdx.input.isKeyPressed(Input.Keys.RIGHT)
         val leftInput = Gdx.input.isKeyPressed(Input.Keys.LEFT)
-        val shoopInput = Gdx.input.isKeyJustPressed(Input.Keys.SPACE)
+        val shootInput = Gdx.input.isKeyJustPressed(Input.Keys.SPACE)
 
         shipXCoordinate = checkPlayerShipDirection(shipXCoordinate, leftInput, rightInput)
 
@@ -97,7 +97,7 @@ class MainScreen(private val game: Game) : Screen {
                 Point(fireballBarXCoordinate, fireballBarYCoordinate), Height(15f))
         fireballBar.draw()
 
-        if (shoopInput && fireballBarLevel !in PlayerFireballLevel.Off().range) {
+        if (shootInput && fireballBarLevel !in PlayerFireballLevel.Off().range) {
             fireballPoint = playerShip.getFireballPointOrigin(fireballWidth)
             val fireball = createPlayerFireball(fireballBarLevel, fireballPoint, fireballHeight, fireballWidth)
             playerFireballs.add(fireball)
@@ -118,7 +118,7 @@ class MainScreen(private val game: Game) : Screen {
 
         enemyShipController.moveEnemyShips(enemyDirection, enemyShipMap)
 
-        speed += .0001f
+        speed += .0003f
 
         enemyShipController = EnemyShipController(
                 XCoordinate(0f),
@@ -127,6 +127,23 @@ class MainScreen(private val game: Game) : Screen {
         )
 
         val listOfEntries = enemyShipMap.entries.toList()
+
+        fireballCollisionCheck@ for (pfIndex in 0 until playerFireballs.size) {
+            for (efIndex in 0 until enemyFireballList.size) {
+                val fireballCollision = playerFireballs[pfIndex].checkForFireballCollision(enemyFireballList[efIndex])
+                if (fireballCollision) {
+                    enemyFireballList.removeAt(efIndex)
+                    val fireball = playerFireballs[pfIndex]
+                    if (fireball.isGreaterThanOne()) {
+                        var fireballD = playerFireballs[pfIndex]
+                        fireballD = fireballD.decrementFireball()
+                        playerFireballs.add(fireballD)
+                    }
+                    playerFireballs.removeAt(pfIndex)
+                    break@fireballCollisionCheck
+                }
+            }
+        }
 
         for (i in enemyShipMap.keys.indices) {
             val id = listOfEntries[i].key
@@ -195,7 +212,7 @@ class MainScreen(private val game: Game) : Screen {
         life = Life(lifeXCoordinate, lifeYCoordinate)
 
         enemyShipMap = createEnemyShipMap(
-                5, 8, YCoordinate(20f), XCoordinate(45f), YCoordinate(45f)
+                3, 6, YCoordinate(20f), XCoordinate(45f), YCoordinate(45f)
         )
 
         enemyShipController = EnemyShipController(

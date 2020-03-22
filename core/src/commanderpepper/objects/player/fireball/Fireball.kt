@@ -68,6 +68,10 @@ class Fireball(
         return rectOverlaps(fireballRect, otherRect)
     }
 
+    fun checkForFireballCollision(fireball: Fireball): Boolean {
+        return fireball.checkForCollision(this.point, this.height, this.width)
+    }
+
     fun isGreaterThanOne(): Boolean {
         return !(this.fireballProperty == PlayerFireballLevel.Low() || this.fireballProperty == PlayerFireballLevel.Off())
     }
