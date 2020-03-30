@@ -1,8 +1,9 @@
-package commanderpepper.screens
+package commanderpepper.game
 
 import com.badlogic.gdx.Game
+import commanderpepper.screens.MainScreen
 
-class TitleScreen : Game() {
+class MainGame : Game() {
     override fun create() {
         setScreen(MainScreen(this))
     }
