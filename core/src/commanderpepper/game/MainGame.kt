@@ -9,13 +9,4 @@ class MainGame : Game() {
 //        setScreen(MainScreen(this))
         setScreen(TitleScreen(this))
     }
-
-    override fun render() {
-        super.render()
-    }
-
-    override fun dispose() {
-        super.dispose()
-    }
-
 }

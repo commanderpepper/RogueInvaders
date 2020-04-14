@@ -7,16 +7,17 @@ import commanderpepper.objects.Height
 import commanderpepper.objects.Width
 import commanderpepper.objects.XCoordinate
 import commanderpepper.objects.YCoordinate
-import commanderpepper.objects.enemyship.EnemyShip
+import commanderpepper.screens.TitleScreen
 
-class Cursor(private val cursorColor: Color,
-             private val xCoordinate: XCoordinate,
-             private val yCoordinate: YCoordinate,
-             private val height: Height,
-             private val width: Width) : Drawable {
+data class Cursor(
+        private val cursorColor: Color,
+        private val xCoordinate: XCoordinate,
+        private val yCoordinate: YCoordinate,
+        private val height: Height,
+        private val width: Width) : Drawable {
 
     override fun draw() {
-        EnemyShip.shapeRenderer.apply {
+        shapeRenderer.apply {
             begin(ShapeRenderer.ShapeType.Filled)
             color = cursorColor
             triangle(xCoordinate.value,
@@ -30,10 +31,14 @@ class Cursor(private val cursorColor: Color,
     }
 
     fun dispose() {
-        EnemyShip.shapeRenderer.dispose()
+        shapeRenderer.dispose()
+    }
+
+    fun move(currentCursorYPosition: TitleScreen.CursorYPosition): Cursor {
+        return Cursor(cursorColor, xCoordinate, currentCursorYPosition.yCoordinate, height, width)
     }
 
     companion object {
-        val shapeRenderer = ShapeRenderer()
+        val shapeRenderer: ShapeRenderer = ShapeRenderer()
     }
 }
